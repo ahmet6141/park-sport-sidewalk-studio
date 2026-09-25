@@ -2,21 +2,60 @@
 from __future__ import annotations
 import math,random
 from .geometry import Mesh,MAT,rect,ellipse,arc,TAU,vadd,vmul,vsub,vunit
+from . import modeling
 
+
+# Side-frame silhouette (u = depth towards the backrest, z = height), CCW, cast steel.
+BENCH_FRAME=[(-.27,0.),(-.19,0.),(-.15,.38),(.13,.38),(.15,0.),(.23,0.),(.25,.40),(.33,.95),(.27,.95),(.19,.45),(-.29,.45)]
+BACK_TILT=.16
+
+def _slat(depth,thick,u,z,tilt=0.,r=.012):
+    """Rounded timber slat section centred at (u, z); optional backward lean."""
+    pts,flags=modeling.rounded_rect_profile(depth,thick,r,3,u,z)
+    return [(a+(b-z)*tilt,b) for a,b in pts],flags
+
+def _bench_parts(sweep_rail,uvscale=.7):
+    """Shared seat/back/frames for straight and curved benches. sweep_rail(u_ofs, part) sweeps."""
+    for u in (-.22,-.11,0.,.11,.22):sweep_rail(*_slat(.097,.055,u,.4775),MAT['Timber'])
+    for z in (.62,.75,.88):sweep_rail(*_slat(.05,.11,.19+(z-.45)*BACK_TILT-.03,z,BACK_TILT),MAT['Timber'])
 
 def bench():
-    m=Mesh('SM_PK01_Bench_200');wood,metal=MAT['Timber'],MAT['Steel']
+    """Straight 2 m bench: cast side frames, soft-edged timber slats (swept sections)."""
+    m=Mesh('SM_PK01_Bench_200');metal=MAT['Steel']
+    def rail(profile,flags,mat):
+        modeling.sweep(m,[(-1.,0.),(1.,0.)],[(0.,1.),(0.,1.)],profile,mat,flags,uvscale=.7,label='slat')
+    _bench_parts(rail)
     for x in (-.72,.72):
-        m.box((x,0,.205),(.065,.49,.41),metal,.007)
-        m.box((x,.19,.61),(.055,.055,.61),metal,.006)
-        m.box((x,0,.43),(.065,.61,.05),metal,.006)
+        modeling.sweep(m,[(x-.03,0.),(x+.03,0.)],[(0.,1.),(0.,1.)],BENCH_FRAME,metal,label='frame')
         m.add_collision_box((x,0,.22),(.09,.52,.44))
-    for y in (-.22,-.11,0,.11,.22):m.box((0,y,.46),(2.,.097,.055),wood,.008,uvscale=.7)
-    for z in (.61,.74,.87):m.box((0,.225,z),(2.,.05,.11),wood,.007,uvscale=.7)
     for x in (-.89,.89):
-        m.cylinder((x,-.18,.47),(x,-.18,.66),.019,metal,n=8)
-        m.cylinder((x,-.18,.66),(x,.19,.66),.022,metal,n=8)
+        m.cylinder((x,-.18,.47),(x,-.18,.66),.019,metal,n=12)
+        m.cylinder((x,-.18,.66),(x,.19,.66),.022,metal,n=12)
     m.add_collision_box((0,0,.455),(2,.55,.10));m.add_collision_box((0,.22,.72),(2,.1,.36))
+    return m
+
+def bench_curved(radius=1.75,angle=70.):
+    """Curved bench following a curb return. Local arc centred on the origin, seat faces +X
+    (away from the centre), backrest on the inner radius. Timber slats are true arcs.
+    """
+    if radius<1.:raise ValueError('Curved bench radius must be at least 1 m.')
+    m=Mesh(f'SM_PK01_BenchCurved_R{round(radius*100)}_{round(angle)}');metal=MAT['Steel']
+    a0,a1=math.radians(-angle/2),math.radians(angle/2);n=max(8,math.ceil(abs(a1-a0)*radius/.12))
+    angles=[a0+(a1-a0)*k/n for k in range(n+1)]
+    rail=[(radius*math.cos(a),radius*math.sin(a)) for a in angles]
+    inward=[(-math.cos(a),-math.sin(a)) for a in angles]
+    def sweep(profile,flags,mat):modeling.sweep(m,rail,inward,profile,mat,flags,uvscale=.7,label='slat')
+    _bench_parts(sweep)
+    for a in (a0+.08,(a0+a1)/2,a1-.08):
+        c=(radius*math.cos(a),radius*math.sin(a));t=(-math.sin(a),math.cos(a));nrm=(-math.cos(a),-math.sin(a))
+        frail=[(c[0]-t[0]*.03,c[1]-t[1]*.03),(c[0]+t[0]*.03,c[1]+t[1]*.03)]
+        modeling.sweep(m,frail,[nrm,nrm],BENCH_FRAME,metal,label='frame')
+    for k in range(3):
+        b0,b1=a0+(a1-a0)*k/3,a0+(a1-a0)*(k+1)/3
+        pts=[((radius+s)*math.cos(b),(radius+s)*math.sin(b)) for b in (b0,b1) for s in (-.3,.3)]
+        lo=[min(p[i] for p in pts) for i in range(2)];hi=[max(p[i] for p in pts) for i in range(2)]
+        m.add_collision_box(((lo[0]+hi[0])/2,(lo[1]+hi[1])/2,.24),(hi[0]-lo[0],hi[1]-lo[1],.48))
+    m.meta['curved_bench']={'radius':radius,'angle':angle}
     return m
 
 def pergola():
@@ -32,7 +71,7 @@ def pergola():
 
 def bin_prop():
     m=Mesh('SM_PK01_Bin_090');metal=MAT['Steel']
-    m.cylinder((0,0,.08),(0,0,.74),.25,metal,n=24)
+    modeling.lathe(m,[(0,.08),(.235,.08),(.25,.10),(.25,.72),(.235,.74),(0,.74)],metal,32,[False,True,False,True,False],label='bin_body')
     for i in range(18):
         a=i*TAU/18;x=.26*math.cos(a);y=.26*math.sin(a)
         m.box((x,y,.43),(.04,.04,.7),MAT['Timber'],.004)
@@ -41,17 +80,26 @@ def bin_prop():
     m.add_collision_box((0,0,.45),(.6,.6,.9));return m
 
 def light_pole():
+    """5 m park luminaire: turned base flange, conical shaft, swan-neck arm, disc head."""
     m=Mesh('SM_PK01_PoleLight_5m');s=MAT['Steel']
-    m.cylinder((0,0,0),(0,0,4.7),.075,s,r2=.045,n=14)
-    m.box((.36,0,4.72),(.87,.12,.085),s,.007)
-    m.box((.57,0,4.67),(.54,.09,.015),MAT['Emission'],.002)
-    m.box((0,0,.03),(.25,.25,.06),s,.004)
+    shaft=[(0,0),(.17,0),(.17,.035),(.13,.07),(.09,.10),(.085,.16),(.052,4.50),(.058,4.53),(.058,4.58),(0,4.60)]
+    modeling.lathe(m,shaft,s,20,[False,False,True,True,False,True,False,False,False],label='shaft')
+    # Swan-neck: tube along a quarter-ellipse from the shaft top to the head.
+    arm=[(.62*(1-math.cos(t*math.pi/2)),0,4.50+.30*math.sin(t*math.pi/2)) for t in (i/10 for i in range(11))]
+    arm+=[(.62+.30*i/4,0,4.80) for i in range(1,5)]
+    m.tube(arm,.028,s,n=12)
+    head=[(0,.0),(.19,.0),(.235,.035),(.215,.085),(.12,.125),(0,.14)]
+    modeling.lathe(m,head,s,28,[False,False,True,True,True],centre=(1.02,0,4.74),label='head')
+    modeling.lathe(m,[(0,-.014),(.175,-.014),(.175,-.003),(0,-.003)],MAT['Emission'],28,[False,False,False],centre=(1.02,0,4.74),label='lens')
     m.add_collision_box((0,0,2.3),(.18,.18,4.6));return m
 
 def bollard():
-    m=Mesh('SM_PK01_BollardLight_09m')
-    m.cylinder((0,0,0),(0,0,.9),.08,MAT['Steel'],n=12)
-    m.cylinder((0,0,.73),(0,0,.81),.083,MAT['Emission'],n=12)
+    """0.9 m path bollard: turned body, recessed light band, domed cap."""
+    m=Mesh('SM_PK01_BollardLight_09m');s=MAT['Steel']
+    modeling.lathe(m,[(0,0),(.11,0),(.11,.025),(.085,.05),(.08,.70),(0,.70)],s,24,[False,False,True,True,False],label='body')
+    modeling.lathe(m,[(0,.70),(.072,.70),(.072,.80),(0,.80)],MAT['Emission'],24,[False,False,False],label='band')
+    modeling.lathe(m,[(0,.80),(.085,.80),(.085,.83)]+[(.085*math.cos(a),.83+.05*math.sin(a)) for a in (i*math.pi/12 for i in range(1,6))]+[(0,.88)],
+                   s,24,[False,False]+[True]*6,label='cap')
     m.add_collision_box((0,0,.45),(.17,.17,.9));return m
 
 def planter():

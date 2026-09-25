@@ -6,7 +6,7 @@ from .planner import ParkConfig,build_park,add_facility
 from .geometry import ScenePlan
 from . import runtime,bridge,exporter,props
 
-TYPES=[('BASKETBALL','Basketbol',''),('TENNIS','Tenis',''),('FOOTBALL','Futbol / 105 x 68',''),('FUTSAL','Futsal',''),('VOLLEYBALL','Voleybol',''),('BADMINTON','Badminton',''),('PICKLEBALL','Pickleball',''),('TABLE_TENNIS','Masa tenisi',''),('FITNESS','Acik hava fitness',''),('BENCH','Bank',''),('PERGOLA','Pergola',''),('PICNIC','Piknik masasi',''),('PLANTER','Ciceklik',''),('TREE','Agac','')]
+TYPES=[('BASKETBALL','Basketbol',''),('TENNIS','Tenis',''),('FOOTBALL','Futbol / 105 x 68',''),('FUTSAL','Futsal',''),('VOLLEYBALL','Voleybol',''),('BADMINTON','Badminton',''),('PICKLEBALL','Pickleball',''),('TABLE_TENNIS','Masa tenisi',''),('FITNESS','Acik hava fitness',''),('BENCH','Bank',''),('PERGOLA','Pergola',''),('PICNIC','Piknik masasi',''),('PLANTER','Ciceklik',''),('TREE','Agac',''),('BENCH_CURVED','Kavisli bank',''),('BOLLARD','Aydinlatmali bollard','')]
 
 class PK01_Settings(bpy.types.PropertyGroup):
     tab:EnumProperty(name='Bolum',items=[('PLAN','Yerlesim',''),('SPORT','Spor',''),('GREEN','Peyzaj',''),('PATH','SW01',''),('EXPORT','Aktarim','')],default='PLAN')
@@ -21,6 +21,10 @@ class PK01_Settings(bpy.types.PropertyGroup):
     wetness:FloatProperty(name='Islaklik',default=0,min=0,max=1)
     path_width:FloatProperty(name='Yol genisligi / m',default=3.2,min=2,max=5)
     path_pattern:EnumProperty(name='SW01 doseme',items=[(p,p,'') for p in ('SLABS','RUNNING','HERRINGBONE','BASKET','STACK')],default='SLABS')
+    path_style:EnumProperty(name='Kaldirim stili',items=[('FLOW','Flow / kavisli + yuvarlak kavsak','Egriyi takip eden doseme, profilli bordur, bordur donuslu kavsaklar'),('CLASSIC','Classic / SW01 1.0.1','Orijinal SW01 cekirdegi, kare kavsak pad')],default='FLOW')
+    curb_profile:EnumProperty(name='Bordur profili',items=[('BULLNOSE','Bullnose / yuvarlak','Dis ust kenar R40 yuvarlatilmis'),('CHAMFER','Pahli','45 derece pah'),('SQUARE','Duz','Kucuk kenar kirimi')],default='BULLNOSE')
+    junction_radius:FloatProperty(name='Kavsak donus yaricapi / m',default=2.5,min=0,max=6,precision=2)
+    meander:FloatProperty(name='Yol kivrimi / m',default=1.2,min=0,max=4,precision=2)
     paver_length:FloatProperty(name='Tas boyu / m',default=.8,min=.1,max=2)
     paver_width:FloatProperty(name='Tas eni / m',default=.4,min=.08,max=1.2)
     joint:FloatProperty(name='Derz / m',default=.006,min=.001,max=.025,precision=3)
@@ -64,7 +68,7 @@ class PK01_Settings(bpy.types.PropertyGroup):
     texture_folder:StringProperty(name='Harici PBR klasoru (istege bagli)',subtype='DIR_PATH',default='')
     export_directory:StringProperty(name='Export klasoru',subtype='DIR_PATH',default='//PK01_Export')
     include_selected_sw01:BoolProperty(name='Secili SW01 modullerini de aktar',default=True)
-    status:StringProperty(name='Durum',default='PK01 1.0.0 hazir. Ilk denemeyi bos sahnede yapin.')
+    status:StringProperty(name='Durum',default='PK01 1.1.0 hazir. Ilk denemeyi bos sahnede yapin.')
 
 
 def config(s):return ParkConfig(**{f.name:tuple(getattr(s,f.name)) if f.name.endswith('_tint') else getattr(s,f.name) for f in fields(ParkConfig)})
@@ -116,7 +120,7 @@ class PK01_OT_add_component(bpy.types.Operator):
             cfg=config(s);plan=ScenePlan('PK01_'+s.component+'_'+uuid.uuid4().hex[:6]);plan.settings={'palette':cfg.palette};kind=s.component
             if kind in dict((x[0],x[1]) for x in TYPES[:9]):add_facility(plan,cfg,kind,(0,0))
             else:
-                mesh={'BENCH':props.bench,'PERGOLA':props.pergola,'PICNIC':props.picnic,'PLANTER':props.planter,'TREE':lambda:props.tree('BROADLEAF',cfg.seed,cfg.detail)}[kind]()
+                mesh={'BENCH':props.bench,'PERGOLA':props.pergola,'PICNIC':props.picnic,'PLANTER':props.planter,'TREE':lambda:props.tree('BROADLEAF',cfg.seed,cfg.detail),'BENCH_CURVED':props.bench_curved,'BOLLARD':props.bollard}[kind]()
                 plan.place(mesh,category='Trees' if kind=='TREE' else 'Furniture')
             root,c=instantiate(plan,context,origin=tuple(context.scene.cursor.location),yaw=s.yaw,replace_existing=False)
             if s.attach_to_active and parent:attach(root,c,parent,context);s.active_root=parent
@@ -205,7 +209,12 @@ class PK01_PT_panel(bpy.types.Panel):
             b.label(text='Yeniden uretim, bu degistirmeyi sifirlar.')
         elif s.tab=='PATH':
             b=l.box();b.label(text='Ortak SW01 geometri + UV duzeni');b.operator('pk01.copy_sw01_style',icon='IMPORT')
+            b=l.box();b.label(text='Kavisli kaldirim / FLOW');b.prop(s,'path_style')
+            col=b.column();col.enabled=s.path_style=='FLOW'
+            for key in ('curb_profile','junction_radius','meander'):col.prop(s,key)
+            b=l.box();b.label(text='Doseme ve bordur olculeri')
             for key in ('path_width','height','path_pattern','paver_length','paver_width','joint','border_width','tactile','variation','paver_tint','curb_tint','border_tint'):b.prop(s,key)
+            l.operator('pk01.build',icon='MOD_BUILD')
             b=l.box();b.label(text='Iki soket arasinda kavisli kaldirim');b.prop(s,'socket_a');b.prop(s,'socket_b');b.prop(s,'handle_length');b.prop(s,'flip_start');b.prop(s,'flip_end');b.prop(s,'attach_to_active');b.operator('pk01.connect_sw01',icon='LINKED')
             b.label(text='Iki ucta genislik ve yuzey kotu esit olmali.',icon='INFO')
         else:

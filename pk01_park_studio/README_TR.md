@@ -1,7 +1,7 @@
 # PK / 01 — PARK + SPORT STUDIO
 ## Blender 4.5 için parametrik park üretimi • SW01 1.0.1 köprüsü • UE5.8 hedefli aktarım
 
-**Sürüm:** 1.0.0 • 25 Eylül 2026  
+**Sürüm:** 1.1.0 • 25 Eylül 2026  
 **Kurulum tipi:** Blender'a kurulan çok dosyalı Python add-on; Text Editor'e yapıştırılacak tek script değildir.  
 **Önemli doğrulama sınırı:** Saf geometri çekirdeği, dokular, koordinat dönüşümleri ve örnek GLB dosyası bağımsız olarak kontrol edildi. Geliştirme ortamında Blender ve Unreal çalıştırılamadı. Kurulum, Blender API çağrıları, FBX exporter ve UE5.8 importer henüz bu uygulamaların içinde çalıştırılarak doğrulanmış değildir. İlk kullanım boş bir test sahnesinde yapılmalıdır.
 
@@ -13,7 +13,7 @@ PK01, birbirine kaldırım ağıyla bağlanan spor sahaları ve peyzaj alanları
 
 Bu paket, Blender veya Unreal için piyasada denenmiş bir ticari ürün değildir. Eklenti kaynak kodu teslimidir. Ayrıca UE içinde spline sürükleyince parkı canlı yeniden üreten bir C++/Blueprint/PCG eklentisi değildir. Üretim Blender'da; UE tarafı editör içe aktarma ve yerleşim otomasyonudur.
 
-**Kurulum ZIP'i:** `PK01_ParkSport_Studio_1_0_0.zip`  
+**Kurulum ZIP'i:** `PK01_ParkSport_Studio_1_1_0.zip`  
 **Ayrı örnek:** `PK01_Garden_Demo.glb` — gömülü dokularla gerçek geometri; Blender'dan export edildiği iddia edilmez.  
 **Testler:** `Tests/validation_report.json`  
 **Önizlemeler:** Gerçek kaynak mesh ve dokulardan alınan VTK/EGL renderları; Blender/Cycles/UE ekran görüntüleri değildir.
@@ -24,7 +24,7 @@ Kurulum ZIP'i üretici eklentiyi içerir. Örnek GLB, büyük önizlemeler ve d�
 
 1. Önce açık çalışmanı kaydet. İlk denemeyi yeni bir dosyada yap.
 2. `Edit → Preferences → Add-ons` bölümünü aç. Sağ üst menüdeki **Install from Disk** komutunu kullan; menü dili farklıysa `.zip`/`.py` seçtiren yerel kurulum komutunu bul.
-3. **ZIP'i açmadan** `PK01_ParkSport_Studio_1_0_0.zip` dosyasını seç. Listede **PK01 | Park + Sport Studio (SW01 Bridge)** eklentisini etkinleştir.
+3. **ZIP'i açmadan** `PK01_ParkSport_Studio_1_1_0.zip` dosyasını seç. Listede **PK01 | Park + Sport Studio (SW01 Bridge)** eklentisini etkinleştir.
 4. `Layout` görünümünde, imleç 3D alanının üzerindeyken `N` tuşuna bas. Sağ kenardaki **PK01** sekmesini aç.
 5. `Yerleşim` bölümünde **Liva / Gölet Bahçesi**, **Draft / hızlı**, 40–60 ağaç gibi hafif bir başlangıç seç. Ağaç ayarları **Peyzaj** bölümündedir.
 6. **Parkı Oluştur / Yeniden Üret** düğmesine bas. Materyalleri görmek için Material Preview veya Rendered görünümüne geç.
@@ -94,6 +94,27 @@ Uçlarda eşit genişlik/yükseklik, Scale 1 ve XY düzlemine paralel yön bekle
 
 PK01 importer, varsayılan olarak `/Game/SW01/Materials/MI_SW01_*` materyallerini bulursa **yeniden kullanır ve değiştirmez**. SW01 başka klasöre alındıysa export edilen `PK01_Import.py` içindeki `SW01_CONTENT_ROOT` değerini değiştir. Mevcut materyal yoksa PK01 kendi klasöründe aynı kaynaklardan yeni materyal üretir.
 
+### FLOW kavisli kaldırımlar (1.1.0)
+
+`SW01` sekmesindeki **Kaldırım stili** iki seçenek sunar:
+
+- **Flow / kavisli + yuvarlak kavşak** (varsayılan): Döşeme taşları yol eksenini takip eden sıralar halinde döşenir; kavislerde taşlar hafif yamuk (radyal) olur, kenar kesimleri iki yanda simetrik ve en az yarım taş genişliğindedir, modül uçlarında 12 cm'den kısa şerit kesim bırakılmaz. Bordürler profil süpürme (sweep) ile üretilir ve derzli taşlara bölünür; dar kavislerde taş boyu otomatik kısalır. Kavşaklar kare pad yerine **bordür dönüşlü (curb return)** yuvarlatılmış köşelerle, çıkmaz uçlar yarım daire ile biter. Kenar şeridi (border) kavşak dönüşü boyunca devam eder.
+- **Classic / SW01 1.0.1**: Orijinal SW01 çekirdeği ve kare kavşak pad'leri. Bu mod 1.0.0 ile birebir aynı kaldırım geometrisini üretir (testlerle doğrulanır).
+
+FLOW ayarları:
+
+```text
+Bordur profili            : BULLNOSE (dış üst kenar yuvarlatılmış), CHAMFER (45° pah), SQUARE
+Kavsak donus yaricapi / m : 0..6, varsayılan 2.5; yakın kavşaklarda otomatik küçültülür
+Yol kivrimi / m           : 0..4, düz bağlantı yollarına verilen yumuşak dalga genliği
+```
+
+Kıvrım, iki uçta sıfır sapma ve sıfır eğimle başlar/biter; böylece yol kavşak ağzına her zaman dik ve kesintisiz oturur. Genlik, merkez hattı dönüş yarıçapı yol genişliğinin en az üç katı kalacak şekilde otomatik sınırlandırılır. Aydınlatma direkleri eğri boyunca gerçek yol eksenine göre konumlanır. En az üç kollu kavşaklarda, bordür dönüşünün çim tarafına kavisli banklar yerleşir (başka rezervasyonlarla çakışan köşeler atlanır).
+
+Soket bağlama köprüsü de FLOW modunda aynı üreticiyi kullanır. FLOW modülleri SW01 materyal slotlarını, `UV0_Tile`, `SW01_Tint`, port verisini ve konveks collision gövdelerini korur; FBX/UE aktarımı değişmez. Aynı kol düzenine sahip kavşaklar tek mesh olarak örneklenir (instance).
+
+Sınırlar: Kavşak ağ yapısı ortogonaldir (hazır masterplanlar gibi). Kavşak pad'lerine ek port üretilmez; yeni bağlantıları yol uçlarındaki IN/OUT soketlerine yap. Rampa (kot farkı) FLOW'da desteklenir ancak çok uzun eğimli yollarda üretim süresi artar.
+
 ## 6. Peyzaj, gölet ve kent mobilyaları
 
 Ağaç dağıtımı bir `seed` ile tekrarlanabilir. Yollar, sahalar, pist, gölet, iskele ve ayrılmış mobilya alanları dışlama bölgeleridir. Prosedürel ağaç tacının hesaplanan yarıçapı bu bölgelere göre kontrol edilir; minimum ağaç aralığı korunur. İstenen sayı alana sığmazsa kısıtları bozmak yerine daha az ağaç yerleştirip not düşer.
@@ -104,7 +125,7 @@ Kaynak ağaç tek Mesh olmalı; gerekirse kendi ağacının parçalarını bir k
 
 Gölet bir çukur arazi yüzeyi, ayrı su yüzeyi, kıyı kayaları/sazlar ve ahşap seyir iskelesinden oluşur. Su, UE'nin native WaterBody nesnesi değildir; simülasyon ve yüzme fiziği oluşturulmaz. Gerekirse UE'deki su materyalini `WATER_MATERIAL_PATH` ile mevcut bir materyale yönlendir.
 
-Kent mobilyaları: banklar, pergola, piknik masası, çiçeklikler, çöp kutuları, bisiklet parkı ve aydınlatma direkleri. Direkler geometrik armatür ve emissive yüzey içerir; her armatüre otomatik UE ışık aktörü konulmaz. Gece çekimi için sahneye uygun gerçek ışıkları Unreal'da kur.
+Kent mobilyaları: yuvarlatılmış kesitli ahşap çıtalı ve döküm yan ayaklı banklar, kavisli banklar, pergola, piknik masası, çiçeklikler, çöp kutuları, bisiklet parkı ve aydınlatma direkleri. Direkler torna (lathe) profilli flanş ve konik gövde, kuğu boynu kol ve disk armatür ile emissive lens içerir; her armatüre otomatik UE ışık aktörü konulmaz. Gece çekimi için sahneye uygun gerçek ışıkları Unreal'da kur.
 
 ## 7. PBR dokular
 

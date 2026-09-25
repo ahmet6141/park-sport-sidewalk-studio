@@ -6,7 +6,7 @@ from dataclasses import dataclass,asdict,replace
 import math,random
 from .geometry import Mesh,MAT,ScenePlan,Port,rect,ellipse,arc,from_sw01,TAU,transform
 from .vendor import sw01_core as sw
-from . import sports,props
+from . import sports,props,flow,curves
 
 @dataclass
 class ParkConfig:
@@ -48,6 +48,10 @@ class ParkConfig:
     track_lanes:int=6
     pond_depth:float=2.2
     palette:str='COASTAL'
+    path_style:str='FLOW'
+    curb_profile:str='BULLNOSE'
+    junction_radius:float=2.5
+    meander:float=1.2
     def validate(self):
         if self.preset not in ('CAMPUS','COMMUNITY','GARDEN'):raise ValueError('Unknown park preset.')
         if self.detail not in ('DRAFT','BALANCED','HERO'):raise ValueError('Unknown detail level.')
@@ -60,6 +64,12 @@ class ParkConfig:
         if not .5<=self.tree_scale<=1.6:raise ValueError('Tree scale: .5..1.6.')
         if not .6<=self.pond_depth<=4:raise ValueError('Pond depth: .6..4 m.')
         if self.track_lanes not in range(2,9):raise ValueError('Track lanes: 2..8.')
+        if self.path_style not in ('CLASSIC','FLOW'):raise ValueError('Unknown path style.')
+        if self.curb_profile not in flow.modeling.CURB_STYLES:raise ValueError('Unknown curb profile.')
+        for n in ('junction_radius','meander'):
+            if not math.isfinite(float(getattr(self,n))):raise ValueError('Non-finite '+n)
+        if not 0<=self.junction_radius<=6:raise ValueError('Junction curb-return radius: 0..6 m.')
+        if not 0<=self.meander<=4:raise ValueError('Path meander: 0..4 m.')
         sw_config(self,self.path_width).validate()
         return self
 
@@ -88,41 +98,120 @@ def blocked(p,reservations,margin=0):
         elif t=='capsule':
             if distance_segment(p,(r['x']-r['straight']/2,r['y']),(r['x']+r['straight']/2,r['y']))<=r['r']+margin:return True
         elif t=='path':
+            box=r.get('bbox')
+            if box:
+                pad=r['width']/2+margin
+                if p[0]<box[0]-pad or p[0]>box[2]+pad or p[1]<box[1]-pad or p[1]>box[3]+pad:continue
             if any(distance_segment(p,a,b)<=r['width']/2+margin for a,b in zip(r['points'],r['points'][1:])):return True
     return False
 
 def reserve_rect(plan,x,y,l,w,label,yaw=0):
     plan.reservations.append(dict(type='rect',x=x,y=y,l=l,w=w,label=label,yaw=yaw))
 
-def add_path(plan,c,name,points,width=None,curbs=True,junction=False):
-    """Call the unmodified SW01 1.0.1 mesher, not a lookalike surface."""
+def flowing(c):return getattr(c,'path_style','CLASSIC')=='FLOW'
+
+def add_path(plan,c,name,points,width=None,curbs=True,junction=False,tangents=(None,None)):
+    """CLASSIC: the unmodified SW01 1.0.1 mesher. FLOW: PK01 path-following paving and
+    swept curbs built on the same SW01 Path/prism/material contract."""
     cfg=sw_config(c,width,curbs,curbs)
     if junction:cfg=replace(cfg,border_width=0,tactile=False)
+    if flowing(c) and not junction and len(points)>2:
+        points=curves.resample_adaptive(points,max_step=.45,min_step=.15)
     origin=points[0];local=[(p[0]-origin[0],p[1]-origin[1]) for p in points]
-    path=sw.Path(local)
-    mesh,meta=sw.build_module('SM_PK01_SW01_'+name,path,cfg)
-    mesh=from_sw01(mesh,meta)
+    path=flow.make_path(local,*tangents) if flowing(c) and not junction else sw.Path(local)
+    if flowing(c) and not junction:
+        mesh,meta=flow.build_flow_module('SM_PK01_Flow_'+name,path,cfg,c.curb_profile)
+    else:
+        mesh,meta=sw.build_module('SM_PK01_SW01_'+name,path,cfg)
+        mesh=from_sw01(mesh,meta)
     zone=plan.zone('Path_'+name,(origin[0],origin[1],0),category='Paths')
     plan.place(mesh,zone=zone,category='Paths')
     plan.paths.append(dict(name=name,points=[tuple(p) for p in points],width=cfg.width,height=cfg.height,junction=junction))
-    plan.reservations.append(dict(type='path',points=[tuple(p) for p in points],width=cfg.width,label=name))
+    bbox=(min(p[0] for p in points),min(p[1] for p in points),max(p[0] for p in points),max(p[1] for p in points))
+    plan.reservations.append(dict(type='path',points=[tuple(p) for p in points],width=cfg.width,label=name,bbox=bbox))
     for tag in ('in','out'):
         port=meta[tag]
         plan.ports.append(Port(name+'_'+tag.upper(),tuple(port['location']),port['yaw_degrees'],cfg.width,cfg.height,zone))
     return mesh
 
-def grid_network(plan,c,nodes,edges):
-    """Square flush junction pads plus trimmed orthogonal paths. No curb across mouths."""
+JUNCTION_EXTENSION=.30  # straight curb after a curb return, before the arm mouth
+
+def junction_reach(c,nodes,edges):
+    """Per-node distance from junction centre to arm mouths.
+    CLASSIC: half width (square pad). FLOW: half width + curb-return radius + a short
+    straight, with the radius reduced locally where neighbouring junctions are close.
+    """
     half=c.path_width/2
-    for key,(x,y) in nodes.items():
-        add_path(plan,c,'Node_'+key,[(x-half,y),(x+half,y)],curbs=False,junction=True)
+    if not flowing(c):return {k:half for k in nodes},{k:0. for k in nodes}
+    budget={k:float(c.junction_radius)+JUNCTION_EXTENSION for k in nodes}
+    for a,b in edges:
+        avail=(math.dist(nodes[a],nodes[b])-.45)/2-half
+        budget[a]=min(budget[a],avail);budget[b]=min(budget[b],avail)
+    reach={};fillet={}
+    for k,b in budget.items():
+        if b<.05:raise ValueError('Junctions are too close for FLOW paths. Use CLASSIC or a narrower path.')
+        ext=min(JUNCTION_EXTENSION,b);r=b-ext
+        fillet[k]=r if r>=.3 else 0.;reach[k]=half+fillet[k]+ext
+    return reach,fillet
+
+def grid_network(plan,c,nodes,edges):
+    """Orthogonal junction network. CLASSIC: square flush pads + trimmed straight paths.
+    FLOW: links meander gently between rounded junctions (built by finish_junctions).
+    Returns the per-node arm reach so spurs end exactly on a junction mouth."""
+    half=c.path_width/2;reach,fillet=junction_reach(c,nodes,edges)
+    if flowing(c):plan.settings['_junctions']={k:dict(xy=tuple(v),reach=reach[k],fillet=fillet[k]) for k,v in nodes.items()}
+    else:
+        for key,(x,y) in nodes.items():
+            add_path(plan,c,'Node_'+key,[(x-half,y),(x+half,y)],curbs=False,junction=True)
     for i,(a,b) in enumerate(edges):
         p,q=nodes[a],nodes[b];dx,dy=q[0]-p[0],q[1]-p[1];L=math.hypot(dx,dy)
         if min(abs(dx),abs(dy))>.001:raise ValueError('Preset junctions must be orthogonal.')
-        if L<=2*half+.4:raise ValueError('Junctions are too close.')
+        if L<=reach[a]+reach[b]+.4:raise ValueError('Junctions are too close.')
         u=(dx/L,dy/L)
-        start=(p[0]+u[0]*half,p[1]+u[1]*half);end=(q[0]-u[0]*half,q[1]-u[1]*half)
-        add_path(plan,c,f'Link_{i:02d}',[start,end])
+        start=(p[0]+u[0]*reach[a],p[1]+u[1]*reach[a]);end=(q[0]-u[0]*reach[b],q[1]-u[1]*reach[b])
+        points=[start,end]
+        if flowing(c) and c.meander>0:
+            span=math.dist(start,end);waves=1 if span<55 else 2
+            amp=curves.safe_meander_amplitude(span,c.path_width,waves,c.meander)
+            # Alternate the bow side so a long spine reads as one continuous S-line.
+            if amp>=.15:points=curves.meander(start,end,amp,waves,.3,1. if i%2==0 else -1.)
+        add_path(plan,c,f'Link_{i:02d}',points,tangents=(u,u))
+    return reach
+
+def finish_junctions(plan,c):
+    """FLOW: build one rounded junction per node once all arms are known."""
+    nodes=plan.settings.pop('_junctions',None)
+    if not nodes:return
+    cfg=replace(sw_config(c,None,True,True),tactile=False);cache={}
+    ends=[(p['points'][0],p['points'][-1]) for p in plan.paths if not p['junction']]
+    for key,n in nodes.items():
+        (x,y),reach=n['xy'],n['reach']
+        arms=''.join(d for d,(dx,dy) in flow.DIRECTIONS.items()
+                     if any(math.dist(e,(x+dx*reach,y+dy*reach))<.05 for pair in ends for e in pair))
+        arms=''.join(d for d in flow.ORDER if d in arms)
+        name=f'SM_PK01_FlowJunction_{arms or "Pad"}_{round(reach*100)}_{round(n["fillet"]*100)}_{c.curb_profile[:2]}'
+        if name not in cache:cache[name]=flow.build_junction(name,arms,cfg,reach,n['fillet'],curb_style=c.curb_profile)[0]
+        zone=plan.zone('Junction_'+key,(x,y,0),category='Paths')
+        plan.place(cache[name],zone=zone,category='Paths')
+        if c.furniture and len(arms)>=3:corner_benches(plan,c,(x,y),arms,n['fillet'])
+        plan.paths.append(dict(name='Node_'+key,points=[(x-reach,y),(x+reach,y)],width=2*reach,height=c.height,junction=True))
+        reserve_rect(plan,x,y,2*reach,2*reach,'Junction_'+key)
+
+def corner_benches(plan,c,centre,arms,fillet,angle=70.):
+    """Curved benches nested in the grass of each curb return, facing the junction."""
+    if fillet<2.:return
+    half=c.path_width/2;radius=fillet-.75;bench=None
+    for i,d in enumerate(flow.ORDER):
+        nxt=flow.ORDER[(i+1)%4]
+        if d not in arms or nxt not in arms:continue
+        (dx,dy),(px,py)=flow.DIRECTIONS[d],flow.DIRECTIONS[nxt]
+        fc=(centre[0]+(dx+px)*(half+fillet),centre[1]+(dy+py)*(half+fillet))
+        face=math.atan2(-(dy+py),-(dx+px))
+        probes=[(fc[0]+radius*math.cos(face+a),fc[1]+radius*math.sin(face+a)) for a in (-math.radians(angle/2),0.,math.radians(angle/2))]
+        if any(blocked(q,plan.reservations,.45) for q in probes):continue
+        bench=bench or props.bench_curved(radius,angle)
+        plan.place(bench,(fc[0],fc[1],0.),math.degrees(face),category='Furniture')
+        mid=probes[1];reserve_rect(plan,mid[0],mid[1],1.6,1.6,'Seat')
 
 def add_facility(plan,c,kind,center,name=None,yaw=0,infield=False):
     facility=sports.create(kind,c.height,c.fencing,gate_width=c.path_width+.4,infield=infield)
@@ -236,6 +325,17 @@ def add_lights(plan,c,size):
     mesh=props.light_pole()
     for p in plan.paths:
         if p['junction']:continue
+        if flowing(c):
+            # Follow the real centre line so poles keep their setback on curves.
+            pts=p['points'];dist=curves.cumulative(pts);length=dist[-1]
+            if length<10:continue
+            n=max(1,int(length/16));off=p['width']/2+.8
+            for j in range(n):
+                (x,y),t=curves.sample(pts,(j+.5)*length/n,dist);x-=t[1]*off;y+=t[0]*off
+                if blocked((x,y),plan.reservations,.25):continue
+                plan.place(mesh,(x,y,0),math.degrees(math.atan2(-t[0],t[1])),category='Lighting')
+                reserve_rect(plan,x,y,.6,.6,'Light')
+            continue
         if len(p['points'])>20:continue
         a,b=p['points'][0],p['points'][-1];length=math.dist(a,b)
         if length<10:continue
@@ -287,6 +387,10 @@ def cubic(p0,p1,p2,p3,step=.4):
 def build_park(c:ParkConfig):
     c.validate();plan=ScenePlan(c.scene_name);plan.settings=asdict(c)
     h=c.path_width/2;ponds=[]
+    def lead(p0,p1):
+        # FLOW: the first Bezier handle leaves a junction mouth exactly along the arm.
+        return (p1[0],p0[1]) if flowing(c) else p1
+    def along(p0,p1):return ((p1[0]-p0[0],p1[1]-p0[1]),None)
     if c.preset=='CAMPUS':
         size=(270.,224.);main_y=-31.;center=(-34.,29.)
         if c.running_track:
@@ -313,22 +417,22 @@ def build_park(c:ParkConfig):
         if enabled:
             lowerkeys=sorted([k for k,v in nodes.items() if v[1]==-82.],key=lambda k:nodes[k][0])
             edges.extend(zip(lowerkeys,lowerkeys[1:]));edges.append(('LowerEast','East'))
-        grid_network(plan,c,nodes,list(edges))
+        R=grid_network(plan,c,nodes,list(edges))
         for kind,x in row:
             if not getattr(c,kind.lower()):continue
             f=add_facility(plan,c,kind,(x,-59.));entry=-59.+f.size[1]/2
-            add_path(plan,c,'Entry_'+kind,[(x,entry),(x,main_y-h)])
+            add_path(plan,c,'Entry_'+kind,[(x,entry),(x,main_y-R[kind])])
         for kind,x in enabled:
             f=add_facility(plan,c,kind,(x,-98.));entry=-98.+f.size[1]/2
-            add_path(plan,c,'Entry_'+kind,[(x,entry),(x,-82.-h)])
+            add_path(plan,c,'Entry_'+kind,[(x,entry),(x,-82.-R['Lower_'+kind])])
         if c.running_track:
-            add_path(plan,c,'Track_Approach',[(-34.,main_y+h),(-34.,center[1]-dim[1]/2)])
+            add_path(plan,c,'Track_Approach',[(-34.,main_y+R['Track']),(-34.,center[1]-dim[1]/2)])
         elif c.football:
-            add_path(plan,c,'Pitch_Approach',[(-34.,main_y+h),(-34.,center[1]-37.)])
+            add_path(plan,c,'Pitch_Approach',[(-34.,main_y+R['Track']),(-34.,center[1]-37.)])
         if c.pond:
-            entry=add_pond(plan,c,d);add_path(plan,c,'Lake_Approach',[(62+h,34),entry])
+            entry=add_pond(plan,c,d);add_path(plan,c,'Lake_Approach',[(62+R['LakeDock'],34),entry])
         # Gentle curved upper promenade: open curve, safely above the track.
-        add_path(plan,c,'Woodland_Curve',cubic((62-h,84),(25,87),(-60,92),(-122,86)))
+        p0=(62-R['North'],84);p1=lead(p0,(25,87));add_path(plan,c,'Woodland_Curve',cubic(p0,p1,(-60,92),(-122,86)),tangents=along(p0,p1))
         xlimits=(-116,112)
     elif c.preset=='COMMUNITY':
         size=(164.,144.);main_y=-24.;nodes={'West':(-75.,main_y),'East':(74.,main_y),'Spur':(25.,main_y),'North':(25.,60.)}
@@ -340,18 +444,18 @@ def build_park(c:ParkConfig):
             d=dict(x=53.,y=26.,rx=18.,ry=15.,depth=c.pond_depth);ponds=[d];nodes['LakeDock']=(25.,26.)
         main=sorted([k for k,v in nodes.items() if v[1]==main_y],key=lambda k:nodes[k][0])
         edges=list(zip(main,main[1:]));vertical=['Spur']+(['LakeDock'] if c.pond else [])+['North'];edges+=list(zip(vertical,vertical[1:]))
-        grid_network(plan,c,nodes,edges)
+        R=grid_network(plan,c,nodes,edges)
         for kind,x in rows:
             if not getattr(c,kind.lower()):continue
-            f=add_facility(plan,c,kind,(x,-48.));add_path(plan,c,'Entry_'+kind,[(x,-48.+f.size[1]/2),(x,main_y-h)])
+            f=add_facility(plan,c,kind,(x,-48.));add_path(plan,c,'Entry_'+kind,[(x,-48.+f.size[1]/2),(x,main_y-R[kind])])
         if c.running_track:
             tr,ln,dim,meta=sports.track(200.,min(c.track_lanes,4),c.height,c.detail);zone=plan.zone('RunningTrack',(-29.,28.,0),category='Sports',kind='TRACK',**meta)
             plan.place(tr,zone=zone,category='Sports');plan.place(ln,zone=zone,category='Sports')
             plan.reservations.append(dict(type='capsule',x=-29.,y=28.,straight=meta['straight_m'],r=meta['inner_radius_m']+min(c.track_lanes,4)*1.22,label='Track'))
-            add_path(plan,c,'Track_Approach',[(-29.,main_y+h),(-29.,28.-dim[1]/2)])
+            add_path(plan,c,'Track_Approach',[(-29.,main_y+R['TrackEntry']),(-29.,28.-dim[1]/2)])
         if c.pond:
-            entry=add_pond(plan,c,d);add_path(plan,c,'Lake_Approach',[(25+h,26),entry])
-        add_path(plan,c,'Woodland_Curve',cubic((25-h,60),(3,65),(-45,65),(-74,58)))
+            entry=add_pond(plan,c,d);add_path(plan,c,'Lake_Approach',[(25+R['LakeDock'],26),entry])
+        p0=(25-R['North'],60);p1=lead(p0,(3,65));add_path(plan,c,'Woodland_Curve',cubic(p0,p1,(-45,65),(-74,58)),tangents=along(p0,p1))
         plan.notes.append('Community preset uses a 200 m recreational loop (maximum 4 lanes); football and secondary sports are added separately.')
         xlimits=(-69,68)
     else:
@@ -366,19 +470,21 @@ def build_park(c:ParkConfig):
         if c.basketball and c.tennis:del nodes['TennisEntry']
         main=sorted([k for k,v in nodes.items() if v[1]==main_y],key=lambda k:nodes[k][0])
         edges=list(zip(main,main[1:]));vertical=['Spur']+(['LakeDock'] if c.pond else [])+['North'];edges+=list(zip(vertical,vertical[1:]))
-        grid_network(plan,c,nodes,edges)
+        R=grid_network(plan,c,nodes,edges)
         if c.basketball:
             f=add_facility(plan,c,'BASKETBALL',(-44.,11.),yaw=180)
-            add_path(plan,c,'Basket_Approach',[(-44.,main_y+h),(-44.,11.-f.size[1]/2)])
+            add_path(plan,c,'Basket_Approach',[(-44.,main_y+R['BasketEntry']),(-44.,11.-f.size[1]/2)])
         if c.tennis:
             # Court centred on the shared entry x coordinate for exact flush joins.
             x=-44. if c.basketball else -43.
-            f=add_facility(plan,c,'TENNIS',(x,-46.));add_path(plan,c,'Tennis_Approach',[(x,-46.+f.size[1]/2),(x,main_y-h)])
+            key='BasketEntry' if c.basketball else 'TennisEntry'
+            f=add_facility(plan,c,'TENNIS',(x,-46.));add_path(plan,c,'Tennis_Approach',[(x,-46.+f.size[1]/2),(x,main_y-R[key])])
         if c.pond:
-            entry=add_pond(plan,c,d);add_path(plan,c,'Lake_Approach',[(-8+h,17),entry])
-        add_path(plan,c,'Garden_Curve',cubic((-8+h,47),(10,50),(38,50),(62,43)))
+            entry=add_pond(plan,c,d);add_path(plan,c,'Lake_Approach',[(-8+R['LakeDock'],17),entry])
+        p0=(-8+R['North'],47);p1=lead(p0,(10,50));add_path(plan,c,'Garden_Curve',cubic(p0,p1,(38,50),(62,43)),tangents=along(p0,p1))
         plan.notes.append('Garden preset contains basketball and tennis only; other facilities can be added at the cursor.')
         xlimits=(-55,55)
+    finish_junctions(plan,c)
     plan.settings['site_size_m']=size;plan.settings['ponds']=ponds
     add_terrain(plan,c,size,ponds)
     if c.furniture:

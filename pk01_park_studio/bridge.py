@@ -4,7 +4,8 @@ from mathutils import Vector
 from dataclasses import fields,replace
 from .vendor import sw01_core as sw
 from .geometry import ScenePlan,from_sw01,Port
-from .planner import ParkConfig,sw_config,cubic
+from .planner import ParkConfig,sw_config,cubic,flowing
+from . import flow,curves
 
 def port_info(obj,prefer='OUT'):
     if not obj:raise ValueError('Choose both connection endpoints.')
@@ -41,15 +42,20 @@ def connection_plan(a,b,c,handle=0.,flip_start=False,flip_end=False):
     # ENTRY ports point outward; the connector approaches against their outward normal.
     bh=pb['heading']+(math.pi if pb['role'] in ('ENTRY','OUT') else 0.)+(math.pi if flip_end else 0.)
     p1=(p0[0]+h*math.cos(ah),p0[1]+h*math.sin(ah));p2=(p3[0]-h*math.cos(bh),p3[1]-h*math.sin(bh))
-    points=cubic(p0[:2],p1,p2,p3[:2],.4);local=[(x-p0[0],y-p0[1]) for x,y in points]
+    points=cubic(p0[:2],p1,p2,p3[:2],.4)
+    if flowing(c):points=curves.resample_adaptive(points,max_step=.4,min_step=.12)
+    local=[(x-p0[0],y-p0[1]) for x,y in points]
     if pa['config']:
         known={f.name for f in fields(sw.Config)};cfg=sw.Config(**{k:v for k,v in pa['config'].items() if k in known})
     else:cfg=sw_config(c,pa['width'])
     cfg=replace(cfg,width=pa['width'],height=pa['height'],end_elevation=p3[2]-p0[2],curve_step=.4)
     path=sw.Path(local);path.normals[0]=(-math.sin(ah),math.cos(ah));path.normals[-1]=(-math.sin(bh),math.cos(bh))
-    name='SW_Link';mesh,meta=sw.build_module('SM_PK01_SW01_Connector',path,cfg)
+    name='SW_Link'
+    if flowing(c):mesh,meta=flow.build_flow_module('SM_PK01_Flow_Connector',path,cfg,c.curb_profile)
+    else:
+        mesh,meta=sw.build_module('SM_PK01_SW01_Connector',path,cfg);mesh=from_sw01(mesh,meta)
     plan=ScenePlan('PK01_Connector');plan.settings={'palette':c.palette};plan.zone(name,p0,category='Paths')
-    plan.place(from_sw01(mesh,meta),zone=name,category='Paths')
+    plan.place(mesh,zone=name,category='Paths')
     for tag in ('in','out'):
         d=meta[tag];plan.ports.append(Port('Connector_'+tag.upper(),tuple(d['location']),d['yaw_degrees'],cfg.width,cfg.height,name))
     plan.notes.append('Connector is a separately editable park object; source SW01 objects are unchanged.')
