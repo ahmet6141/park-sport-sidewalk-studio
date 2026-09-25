@@ -1,0 +1,753 @@
+{
+  "product": "PK01 Park + Sport Studio",
+  "version": "1.0.0",
+  "executed_environment": "CPython 3.13, Linux; pure geometry only",
+  "blender_runtime_tested": false,
+  "unreal_runtime_tested": false,
+  "checks": [
+    {
+      "name": "CAMPUS mesh attributes and nondegenerate faces",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "CAMPUS forest exclusions and spacing",
+      "passed": true,
+      "details": {
+        "trees": 140,
+        "minimum_spacing_m": 4.813635016585049
+      }
+    },
+    {
+      "name": "CAMPUS valid scene references",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "CAMPUS all paths use SW01 data",
+      "passed": true,
+      "details": {
+        "path_assets": 42
+      }
+    },
+    {
+      "name": "COMMUNITY mesh attributes and nondegenerate faces",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "COMMUNITY forest exclusions and spacing",
+      "passed": true,
+      "details": {
+        "trees": 95,
+        "minimum_spacing_m": 4.81697109429535
+      }
+    },
+    {
+      "name": "COMMUNITY valid scene references",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "COMMUNITY all paths use SW01 data",
+      "passed": true,
+      "details": {
+        "path_assets": 26
+      }
+    },
+    {
+      "name": "GARDEN mesh attributes and nondegenerate faces",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "GARDEN forest exclusions and spacing",
+      "passed": true,
+      "details": {
+        "trees": 80,
+        "minimum_spacing_m": 4.921710424146494
+      }
+    },
+    {
+      "name": "GARDEN valid scene references",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "GARDEN all paths use SW01 data",
+      "passed": true,
+      "details": {
+        "path_assets": 15
+      }
+    },
+    {
+      "name": "Variant min_width",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Variant max_width",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Variant herringbone",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Variant tactile",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Variant no_sports_no_lake",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Sport BASKETBALL",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Sport TENNIS",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Sport VOLLEYBALL",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Sport BADMINTON",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Sport PICKLEBALL",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Sport FUTSAL",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Sport FOOTBALL",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Sport FITNESS",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Sport TABLE_TENNIS",
+      "passed": true,
+      "details": []
+    },
+    {
+      "name": "Analytic lap 200.0",
+      "passed": true,
+      "details": {
+        "metres": 200.0,
+        "not_homologated": true
+      }
+    },
+    {
+      "name": "Analytic lap 400.0",
+      "passed": true,
+      "details": {
+        "metres": 400.0,
+        "not_homologated": true
+      }
+    },
+    {
+      "name": "SW01 core byte identity",
+      "passed": true,
+      "details": {
+        "sha256": "971c3ff188918fab7bcb456faee8642085d4f124eceff41dd9ba2ecf973d88a2"
+      }
+    },
+    {
+      "name": "SW01 texture identity PaverConcrete_BaseColor.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity PaverConcrete_ORM.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity PaverConcrete_NormalGL.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity PaverConcrete_NormalDX.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity CurbConcrete_BaseColor.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity CurbConcrete_ORM.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity CurbConcrete_NormalGL.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity CurbConcrete_NormalDX.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity Mortar_BaseColor.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity Mortar_ORM.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity Mortar_NormalGL.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity Mortar_NormalDX.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity Tactile_BaseColor.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity Tactile_ORM.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity Tactile_NormalGL.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity Tactile_NormalDX.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity Metal_BaseColor.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity Metal_ORM.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity Metal_NormalGL.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "SW01 texture identity Metal_NormalDX.png",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "EPDM GL/DX normal conversion",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Grass GL/DX normal conversion",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Timber GL/DX normal conversion",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Bark GL/DX normal conversion",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Mulch GL/DX normal conversion",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Stone GL/DX normal conversion",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Gravel GL/DX normal conversion",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Leaf GL/DX normal conversion",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Water GL/DX normal conversion",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Axis calibration False -1 -1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False -1 -1 0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False -1 -1 1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False -1 -1 2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False -1 -1 3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False -1 -1 4",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Axis calibration False -1 1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False -1 1 0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False -1 1 1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False -1 1 2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False -1 1 3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False -1 1 4",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Axis calibration False 1 -1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False 1 -1 0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False 1 -1 1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False 1 -1 2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False 1 -1 3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False 1 -1 4",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Axis calibration False 1 1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False 1 1 0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False 1 1 1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False 1 1 2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False 1 1 3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform False 1 1 4",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Axis calibration True -1 -1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True -1 -1 0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True -1 -1 1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True -1 -1 2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True -1 -1 3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True -1 -1 4",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Axis calibration True -1 1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True -1 1 0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True -1 1 1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True -1 1 2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True -1 1 3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True -1 1 4",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Axis calibration True 1 -1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True 1 -1 0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True 1 -1 1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True 1 -1 2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True 1 -1 3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True 1 -1 4",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Axis calibration True 1 1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True 1 1 0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True 1 1 1",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True 1 1 2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True 1 1 3",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Affine transform True 1 1 4",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Reject mirror",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Reject shear",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Reject zero",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax contracts.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax __init__.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax props.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax bridge.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax exporter.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax geometry.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax surfaces.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax materials.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax ui.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax planner.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax sports.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax runtime.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax unreal/PK01_Import.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax vendor/__init__.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Python syntax vendor/sw01_core.py",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Seed determinism",
+      "passed": true,
+      "details": null
+    },
+    {
+      "name": "Independent GLB decode",
+      "passed": true,
+      "details": {
+        "reader": "trimesh",
+        "source_triangles": 207862,
+        "decoded_triangles": 207862,
+        "geometry_primitives": 104,
+        "size_bytes": 66933764,
+        "bounds_m_gltf_Y_up": [
+          [
+            -71.0,
+            -2.200000047683716,
+            -57.00845617611242
+          ],
+          [
+            71.0,
+            12.077184492333208,
+            57.07952186103069
+          ]
+        ],
+        "sha256": "a2b454add4826a89206ba17e727da04da06c7f904aac01b37a436b409686103b"
+      }
+    },
+    {
+      "name": "Final Python syntax validation",
+      "passed": true,
+      "details": "AST parse only; does NOT execute bpy/unreal"
+    }
+  ],
+  "plans": {
+    "CAMPUS": {
+      "assets": 101,
+      "placements": 496,
+      "zones": 53,
+      "ports": 94,
+      "unique_triangles": 508140,
+      "instanced_triangles": 2256440,
+      "trees": 140,
+      "size_m": [
+        270.0,
+        224.0
+      ],
+      "build_seconds": 8.886,
+      "notes": [
+        "Futsal penalty layout is simplified for visual scenery.",
+        "Original procedural tree/texture starters, not photogrammetry.",
+        "Flat masterplan with a depressed pond basin; no terrain draping or automatic UE WaterBody.",
+        "Sports markings are visual references, not competition or accessibility certification."
+      ]
+    },
+    "COMMUNITY": {
+      "assets": 68,
+      "placements": 356,
+      "zones": 32,
+      "ports": 57,
+      "unique_triangles": 266626,
+      "instanced_triangles": 1441218,
+      "trees": 95,
+      "size_m": [
+        164.0,
+        144.0
+      ],
+      "build_seconds": 4.104,
+      "notes": [
+        "Community preset uses a 200 m recreational loop (maximum 4 lanes); football and secondary sports are added separately.",
+        "Original procedural tree/texture starters, not photogrammetry.",
+        "Flat masterplan with a depressed pond basin; no terrain draping or automatic UE WaterBody.",
+        "Sports markings are visual references, not competition or accessibility certification."
+      ]
+    },
+    "GARDEN": {
+      "assets": 50,
+      "placements": 306,
+      "zones": 18,
+      "ports": 33,
+      "unique_triangles": 207862,
+      "instanced_triangles": 1191006,
+      "trees": 80,
+      "size_m": [
+        142.0,
+        112.0
+      ],
+      "build_seconds": 2.915,
+      "notes": [
+        "Garden preset contains basketball and tennis only; other facilities can be added at the cursor.",
+        "Original procedural tree/texture starters, not photogrammetry.",
+        "Flat masterplan with a depressed pond basin; no terrain draping or automatic UE WaterBody.",
+        "Sports markings are visual references, not competition or accessibility certification."
+      ]
+    }
+  },
+  "summary": {
+    "total": 127,
+    "passed": 127,
+    "failed": 0
+  }
+}

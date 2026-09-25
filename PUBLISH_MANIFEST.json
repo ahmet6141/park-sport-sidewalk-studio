@@ -1,0 +1,429 @@
+{
+  "format": 1,
+  "prepared_for": "ahmet6141/park-sport-sidewalk-studio",
+  "visibility_requested": "public",
+  "remote_created_by_assistant": false,
+  "notes": "Local package bytes, not a completed GitHub publication.",
+  "files": {
+    ".gitattributes": {
+      "size": 92,
+      "sha256": "3e40c7482909ce1faf29568e5bc185f78e011c4761ccc2cd758834d4835d86b3"
+    },
+    ".github/ISSUE_TEMPLATE/bug_report.md": {
+      "size": 457,
+      "sha256": "44d0d83cfcd3e4292a67ba3b94859460c1faf09e017eb91be2dc5c02448400e6"
+    },
+    ".gitignore": {
+      "size": 396,
+      "sha256": "ae2b337f77c7f972a138b0980264f1ef9690b09d195cbc7d368dcccac0478402"
+    },
+    "CHANGELOG.md": {
+      "size": 433,
+      "sha256": "5769406015fcee06389e97adfeb13913b4e03f251bbdb2d459855eea78f0f7bc"
+    },
+    "CONTRIBUTING.md": {
+      "size": 891,
+      "sha256": "b4707eb2c42cd3bad065660b80e11523948917ffd4c039ca853617941a2a51cc"
+    },
+    "LICENSE.txt": {
+      "size": 1944,
+      "sha256": "d7184eba7205c8be4834c2cb2b9d4b4f5ccfba2b105648107c17373c962830d8"
+    },
+    "Publish-GitHub.ps1": {
+      "size": 8551,
+      "sha256": "701569141f0b6c52c75a31762dcef6a429b33dc45a3e96bdc824b349e251ef4d"
+    },
+    "README.md": {
+      "size": 4786,
+      "sha256": "95d5695bdbc633757e89dea2e4479a635818fcd0a5525242a16e6b28c9f00f65"
+    },
+    "README_TR.md": {
+      "size": 2174,
+      "sha256": "30c3c9fdef9f95d025d265e08824c8aceec3c92d023b0768f8165cd0696eebeb"
+    },
+    "YAYINLA.cmd": {
+      "size": 274,
+      "sha256": "f98c8346a6e99cdecb9ff65d1d6f2bf4a0b8fee80bc010b2a64a14d245dfcb60"
+    },
+    "docs/PUBLISH_TR.md": {
+      "size": 5087,
+      "sha256": "e14b5a312abb9a9e9a0948fa2663b0c23d9de9afc65852adecadddf3e31cca33"
+    },
+    "docs/previews/PK01_Design_Board.png": {
+      "size": 2068748,
+      "sha256": "b1c0c57e80e71e7ed6f15b7c6a1dc29aa35b6fd8a934abd06240e6d45c7bdf05"
+    },
+    "docs/previews/PK01_Lakeside_Detail.png": {
+      "size": 3418915,
+      "sha256": "0da76adfcfa57008410f416862dbe64d05b96e01cbc5b298b3e9e8ef343b8f2d"
+    },
+    "docs/previews/PK01_Sport_Detail.png": {
+      "size": 4215824,
+      "sha256": "0357813f3417cd0f6ed93831761f1b84b199e2f28f3c0de9e15c252d1a0572d5"
+    },
+    "pk01_park_studio/FILE_HASHES.json": {
+      "size": 9435,
+      "sha256": "a19e78759928935bca6fe26d53625aee4040c17284f89b84010c6d3abf0a9ec0"
+    },
+    "pk01_park_studio/LICENSE.txt": {
+      "size": 1944,
+      "sha256": "d7184eba7205c8be4834c2cb2b9d4b4f5ccfba2b105648107c17373c962830d8"
+    },
+    "pk01_park_studio/README_TR.md": {
+      "size": 18717,
+      "sha256": "e86a486f9c0b4a1f293ded23c315adc4b5112b0092e705974c9b0464b146372a"
+    },
+    "pk01_park_studio/__init__.py": {
+      "size": 588,
+      "sha256": "97bf2202805f61edd9748d58076873fd209222ab9987a630d2cf087d3cfef4d3"
+    },
+    "pk01_park_studio/assets/textures/Bark/Bark_BaseColor.png": {
+      "size": 609813,
+      "sha256": "c27bb813a3e82e8979699859ce531a2c5edcfcf804053d45a69f25893d36875a"
+    },
+    "pk01_park_studio/assets/textures/Bark/Bark_Height.png": {
+      "size": 1821556,
+      "sha256": "adb7d0d144ccd5af9efb75346159e824a5f11a4c12f0f220270c77ddd2791997"
+    },
+    "pk01_park_studio/assets/textures/Bark/Bark_NormalDX.png": {
+      "size": 1526167,
+      "sha256": "030b089f38d333318db7adc8df610cb8cf6e71d655716f89b4124ff8d99db78e"
+    },
+    "pk01_park_studio/assets/textures/Bark/Bark_NormalGL.png": {
+      "size": 1526141,
+      "sha256": "91d7541cc91017077ab0a7a76819ac2bc6d35b429bb5d5e433803d9c23cb7246"
+    },
+    "pk01_park_studio/assets/textures/Bark/Bark_ORM.png": {
+      "size": 814422,
+      "sha256": "880a9fbda888577407a17f1f10d03ede7b9e4eda2fbb25500359e2364939f8de"
+    },
+    "pk01_park_studio/assets/textures/CurbConcrete/CurbConcrete_BaseColor.png": {
+      "size": 3652628,
+      "sha256": "c724c83f45bff000dcfd21718b70087d9f1f7bb3ef32bb44b9e99b958bc4beab"
+    },
+    "pk01_park_studio/assets/textures/CurbConcrete/CurbConcrete_NormalDX.png": {
+      "size": 7372772,
+      "sha256": "af2fb1f933fef8248aa21ba0aefe36791a2ff0db29f3d766982756abc5e827bb"
+    },
+    "pk01_park_studio/assets/textures/CurbConcrete/CurbConcrete_NormalGL.png": {
+      "size": 7373367,
+      "sha256": "e2bec5588d62dd5e3e7ea2583946912a3071e94f7f0e36de7449941398770f0f"
+    },
+    "pk01_park_studio/assets/textures/CurbConcrete/CurbConcrete_ORM.png": {
+      "size": 3448641,
+      "sha256": "f29ae16ba5512d52e13e88d1fe3a76095b0a6221fd049be1fa9e7e9c88a5874c"
+    },
+    "pk01_park_studio/assets/textures/EPDM/EPDM_BaseColor.png": {
+      "size": 1064850,
+      "sha256": "c47c7ad927c4a3f4587bf2bdc65826a7f03caf09d4eb45af1fbf22c0ea26d947"
+    },
+    "pk01_park_studio/assets/textures/EPDM/EPDM_Height.png": {
+      "size": 1945584,
+      "sha256": "f43dbb4de5243bc2e69adf2dfeaa6e8a3e1b191caee65695f3d2084ef11686fa"
+    },
+    "pk01_park_studio/assets/textures/EPDM/EPDM_NormalDX.png": {
+      "size": 2092672,
+      "sha256": "022a95a19401c80e1cae079f7e9583e0e304dd60a907cf9e2c7ed471848d60b5"
+    },
+    "pk01_park_studio/assets/textures/EPDM/EPDM_NormalGL.png": {
+      "size": 2092704,
+      "sha256": "397d67314214e5110894af58a7653b49459fe410e813676a87323f24774f1caa"
+    },
+    "pk01_park_studio/assets/textures/EPDM/EPDM_ORM.png": {
+      "size": 985160,
+      "sha256": "990c087b1a3bd219f84204d3d8d2ce50a602e1d017816c9b8e0eae88d9708b09"
+    },
+    "pk01_park_studio/assets/textures/Grass/Grass_BaseColor.png": {
+      "size": 1098098,
+      "sha256": "59edbfa5fcf0ad4e8cbe4435eecaa7c695c669bad7660ca26661d7da86a5467b"
+    },
+    "pk01_park_studio/assets/textures/Grass/Grass_Height.png": {
+      "size": 1936476,
+      "sha256": "de2fc3000b86a9d8c1e021981a4f612cfd0a40caba5d02964de0a9867616b4e8"
+    },
+    "pk01_park_studio/assets/textures/Grass/Grass_NormalDX.png": {
+      "size": 1799113,
+      "sha256": "7e12b72a00028d00ab29c0b4063fbeee26bc25f5913d071ae42dab92ccbc50df"
+    },
+    "pk01_park_studio/assets/textures/Grass/Grass_NormalGL.png": {
+      "size": 1799207,
+      "sha256": "630c3d3f3a72bac897aa598cdcd6003a256778de4f713ceea45bdd7d7e513d37"
+    },
+    "pk01_park_studio/assets/textures/Grass/Grass_ORM.png": {
+      "size": 967398,
+      "sha256": "fabaed96fa0e28defba8427711718f5aa1122b2791ce878b3a5039e842c92239"
+    },
+    "pk01_park_studio/assets/textures/Gravel/Gravel_BaseColor.png": {
+      "size": 778753,
+      "sha256": "b2de028d059b87947b5f3b85dd6e5e2aa049235db496881aeee1af2af774a8bc"
+    },
+    "pk01_park_studio/assets/textures/Gravel/Gravel_Height.png": {
+      "size": 1811639,
+      "sha256": "37b0490445d4b1aad5936b61ae0f06d4749023cfec8fc7a9fce1f2d351353d17"
+    },
+    "pk01_park_studio/assets/textures/Gravel/Gravel_NormalDX.png": {
+      "size": 1350991,
+      "sha256": "f995b6ab63cd3b52a81536ad8bfdba08819abc6dfc7c29b0e55a6706258a442d"
+    },
+    "pk01_park_studio/assets/textures/Gravel/Gravel_NormalGL.png": {
+      "size": 1351037,
+      "sha256": "32572f66af5748b248b7c3a6913f95714775ab857348e4c22ac5b68c0e42490e"
+    },
+    "pk01_park_studio/assets/textures/Gravel/Gravel_ORM.png": {
+      "size": 836941,
+      "sha256": "f40d684399dedd171ba5b640f5aa566fc45d1eb4c101d7b7fe910f258a7f857f"
+    },
+    "pk01_park_studio/assets/textures/Leaf/Leaf_BaseColor.png": {
+      "size": 35697,
+      "sha256": "c8fa340abf501025f936360ee77ca287408ee8426da90a63e00e665432bdaf54"
+    },
+    "pk01_park_studio/assets/textures/Leaf/Leaf_Height.png": {
+      "size": 1749070,
+      "sha256": "ec88836630f49d6ea7972e70ca6ff4dda4c3dca7439ce3f8ada53b204507abda"
+    },
+    "pk01_park_studio/assets/textures/Leaf/Leaf_NormalDX.png": {
+      "size": 665107,
+      "sha256": "4092f12bd2baec6f91988979ec081c8b69058cbe18359991b12d914ad5b6c26e"
+    },
+    "pk01_park_studio/assets/textures/Leaf/Leaf_NormalGL.png": {
+      "size": 665114,
+      "sha256": "94eb9df7f6e428d1f7399e573438d69574c762cb226011f6846c3d3ee8bc1ba8"
+    },
+    "pk01_park_studio/assets/textures/Leaf/Leaf_ORM.png": {
+      "size": 807930,
+      "sha256": "d77908c55e8d04cb0e21f9a364b98b313a5ecd5ccd2012f83e28ae35d98b9568"
+    },
+    "pk01_park_studio/assets/textures/Metal/Metal_BaseColor.png": {
+      "size": 312456,
+      "sha256": "d6f34a7fed37cb7175a0aba0942f8129f060f5a235e3da6a7fedf7e1c9cffd01"
+    },
+    "pk01_park_studio/assets/textures/Metal/Metal_NormalDX.png": {
+      "size": 148476,
+      "sha256": "85992f1d694cc8d384232703babcb044f834e8aa44e175a565b8379dc9f37167"
+    },
+    "pk01_park_studio/assets/textures/Metal/Metal_NormalGL.png": {
+      "size": 148392,
+      "sha256": "2ccbe4fdde216dc1a9040cde212be27f680f4e1cffe9eb45df5c70c2c96eb444"
+    },
+    "pk01_park_studio/assets/textures/Metal/Metal_ORM.png": {
+      "size": 240485,
+      "sha256": "c1c0d7fccef7a3a43c914bc0934a92441e5e4f8151d3cc90d6c63ec9437fb7ea"
+    },
+    "pk01_park_studio/assets/textures/Mortar/Mortar_BaseColor.png": {
+      "size": 1147961,
+      "sha256": "f78942f5b421454eb41c0fb440da9ce5d4753babd5574fa124f9aaffd418fee1"
+    },
+    "pk01_park_studio/assets/textures/Mortar/Mortar_NormalDX.png": {
+      "size": 1802491,
+      "sha256": "4fb47108dc1897951e3ae1b8156a25f1849ace4a00a3313624062dc47ad50f56"
+    },
+    "pk01_park_studio/assets/textures/Mortar/Mortar_NormalGL.png": {
+      "size": 1802843,
+      "sha256": "deeece76d318d0de49b41ce6c130d137993997212acfde6ec5fe6376db2a842e"
+    },
+    "pk01_park_studio/assets/textures/Mortar/Mortar_ORM.png": {
+      "size": 899667,
+      "sha256": "04a4b4af3fa8c5b1541227d38bf4b084b723119de26ace6a19962710646c9a19"
+    },
+    "pk01_park_studio/assets/textures/Mulch/Mulch_BaseColor.png": {
+      "size": 530400,
+      "sha256": "432fe10b229c9a1d7cfa09043762674354cdf44566318cad24081ca4288e93be"
+    },
+    "pk01_park_studio/assets/textures/Mulch/Mulch_Height.png": {
+      "size": 1788022,
+      "sha256": "83ba94fae531a9efa408c71f18c8172f820dcaefc3d16f8f0999dd56b8793fd3"
+    },
+    "pk01_park_studio/assets/textures/Mulch/Mulch_NormalDX.png": {
+      "size": 1313850,
+      "sha256": "71a074eb811a8967accf25f019d07f52aba468eaa9e5401b410add1e1e01a494"
+    },
+    "pk01_park_studio/assets/textures/Mulch/Mulch_NormalGL.png": {
+      "size": 1313902,
+      "sha256": "876f27578950e7def0b3ab7799de67fe1f5b5e1b1871fe42aa6a1228b50bdc39"
+    },
+    "pk01_park_studio/assets/textures/Mulch/Mulch_ORM.png": {
+      "size": 805456,
+      "sha256": "16f5d4580815556ff447d3bda7ed2d7cc82b0c324f79498474017f678a1c7b3f"
+    },
+    "pk01_park_studio/assets/textures/PaverConcrete/PaverConcrete_BaseColor.png": {
+      "size": 3676575,
+      "sha256": "11f42d6168ade04b1f0dc0fb0abbc31d298f20a9f925be9dd30a1c8921cfbbf7"
+    },
+    "pk01_park_studio/assets/textures/PaverConcrete/PaverConcrete_NormalDX.png": {
+      "size": 6210311,
+      "sha256": "1ed6558c8545f95d6d9966cb2448fb30013b37c3c4d80e0aa06791fd66037263"
+    },
+    "pk01_park_studio/assets/textures/PaverConcrete/PaverConcrete_NormalGL.png": {
+      "size": 6211200,
+      "sha256": "f9e9b17e94d3e59e101fc3cf97e958da18df04f19af530847c811f979eaa0763"
+    },
+    "pk01_park_studio/assets/textures/PaverConcrete/PaverConcrete_ORM.png": {
+      "size": 3449317,
+      "sha256": "2b5a46a4a427bba991398b2bdf5483e739316537843bc291227a5c9b7e538446"
+    },
+    "pk01_park_studio/assets/textures/Stone/Stone_BaseColor.png": {
+      "size": 883434,
+      "sha256": "6c49ada57122bdb6c49dce75339449c2f7315e1d07f917737bdcd8101977c35b"
+    },
+    "pk01_park_studio/assets/textures/Stone/Stone_Height.png": {
+      "size": 1875117,
+      "sha256": "124fa025ff449bddc1cd5653c2f61453fd71ee164ec80a9f08532fe1cfe171fc"
+    },
+    "pk01_park_studio/assets/textures/Stone/Stone_NormalDX.png": {
+      "size": 1530796,
+      "sha256": "e29c7ae79a64707714df30cfe5599704062ac55a2b324c4ca6fccfbc8b4c0e12"
+    },
+    "pk01_park_studio/assets/textures/Stone/Stone_NormalGL.png": {
+      "size": 1530788,
+      "sha256": "8f7dfdd0e6f500f89526adb57d51adc107e4d71d4792d21dc794980bdc990784"
+    },
+    "pk01_park_studio/assets/textures/Stone/Stone_ORM.png": {
+      "size": 903596,
+      "sha256": "6771d823e41d4dae630eb1205dd99ab88411d27b5fba862ddb2f826d11017ada"
+    },
+    "pk01_park_studio/assets/textures/Tactile/Tactile_BaseColor.png": {
+      "size": 1197545,
+      "sha256": "25c4715465e7906b0efe4327df27a08603dedf00dd8fbe3efc590cc70406f54c"
+    },
+    "pk01_park_studio/assets/textures/Tactile/Tactile_NormalDX.png": {
+      "size": 1154438,
+      "sha256": "e6a80d25bbd12354f34fa5373966edcdb0001b0dab5602055e8b3d3af049389a"
+    },
+    "pk01_park_studio/assets/textures/Tactile/Tactile_NormalGL.png": {
+      "size": 1154584,
+      "sha256": "9adc8d222e9a85d0bd324a7dc383b0e89cc101a1db488c6074db4f07b3200af7"
+    },
+    "pk01_park_studio/assets/textures/Tactile/Tactile_ORM.png": {
+      "size": 909048,
+      "sha256": "fb82ad5367d4f65b6fbbb9b672e461bff416ff5cb63b6d314c2f9e6f87238c80"
+    },
+    "pk01_park_studio/assets/textures/Timber/Timber_BaseColor.png": {
+      "size": 788055,
+      "sha256": "80956ef0e67905cc7221b8f7dc332fb2166cb6301cfa7ed7212238dc984212e6"
+    },
+    "pk01_park_studio/assets/textures/Timber/Timber_Height.png": {
+      "size": 1934634,
+      "sha256": "b6e35ac5d54c7d6b713a1eaf738fa657cc5e7d59d4b1df3fc86574e693dfe2e3"
+    },
+    "pk01_park_studio/assets/textures/Timber/Timber_NormalDX.png": {
+      "size": 1942580,
+      "sha256": "3d2d9869ae899a8520b4d584884c5dca90e8e179daea5f4d708b5361a894380c"
+    },
+    "pk01_park_studio/assets/textures/Timber/Timber_NormalGL.png": {
+      "size": 1942634,
+      "sha256": "47aa9038e038d404666a722da223834ebdd9c382bc867a1fa69da1468a0a45b0"
+    },
+    "pk01_park_studio/assets/textures/Timber/Timber_ORM.png": {
+      "size": 968994,
+      "sha256": "9814cd298b0e6213acf17439b49303ae4dcddb6dccf53978ff8f3c1f24f3c0ab"
+    },
+    "pk01_park_studio/assets/textures/Water/Water_BaseColor.png": {
+      "size": 457108,
+      "sha256": "570c34b05adc77799df6c7bc12a6dd17e1d838a96c93c50df3f019378b453117"
+    },
+    "pk01_park_studio/assets/textures/Water/Water_Height.png": {
+      "size": 1650587,
+      "sha256": "2664ea474cd669c91ef629d120f707f069c5bec1260fc3b8eae78ef34bb95353"
+    },
+    "pk01_park_studio/assets/textures/Water/Water_NormalDX.png": {
+      "size": 72964,
+      "sha256": "2d09a8aa991e0a3fa11b90117f8283b01768cb0e0b198932a38c03a5ad0b1c4e"
+    },
+    "pk01_park_studio/assets/textures/Water/Water_NormalGL.png": {
+      "size": 72800,
+      "sha256": "513e46d33f521cf2577e79fb23cc9756d5a119a6c8006c78cb7c92856c7a12fc"
+    },
+    "pk01_park_studio/assets/textures/Water/Water_ORM.png": {
+      "size": 771831,
+      "sha256": "1d93cc79a5debf1bd6d4381ee7ecca1d08c3e7e620f86c21eaefcf438ac9559d"
+    },
+    "pk01_park_studio/assets/textures/texture_provenance.json": {
+      "size": 2794,
+      "sha256": "afe389cb637ce13abf18fcae9e4548a13ece7c14799284633caa65a852a86c15"
+    },
+    "pk01_park_studio/bridge.py": {
+      "size": 4442,
+      "sha256": "ad6055ecef960016b94da3f21abb27313cb1be59604cf1ffc9a38458f3939258"
+    },
+    "pk01_park_studio/contracts.py": {
+      "size": 3052,
+      "sha256": "cebaf4a7542968f3a69f346c657e2d479371139599805f561915aebd0feb0823"
+    },
+    "pk01_park_studio/docs/SOURCES_AND_LIMITS.md": {
+      "size": 5436,
+      "sha256": "4b0db75d9d5b4f69db8db0977dca79f9c73cb2a9cdf18dbea666a9dabcc9344a"
+    },
+    "pk01_park_studio/docs/TECHNICAL_TR.md": {
+      "size": 6054,
+      "sha256": "778142da732aa706627c7ecc357de4b951095f2e0dc9c5644671a8d8ec99a1f4"
+    },
+    "pk01_park_studio/docs/validation_report.json": {
+      "size": 16609,
+      "sha256": "4fb3d948a9637a678deb5594f9895dc00d143acfdcf1d8b278a7245572731866"
+    },
+    "pk01_park_studio/exporter.py": {
+      "size": 10628,
+      "sha256": "a673c55043115e447b7c6b922b58e7c72912e7e57c17ee70bab4b4ac9191f5c6"
+    },
+    "pk01_park_studio/geometry.py": {
+      "size": 9280,
+      "sha256": "b58054b56c18cf15a40e2a74f944db173321528aefc1865f0db0ae8c480d0fb5"
+    },
+    "pk01_park_studio/materials.py": {
+      "size": 5041,
+      "sha256": "309113cb25ef02a551aa1b04e06cc08eaf5eebf22af49420f726669433243971"
+    },
+    "pk01_park_studio/planner.py": {
+      "size": 22596,
+      "sha256": "54f7f217213b33b9ab1c17641505925171a6ae4917350167620b7bbe39cfc9a9"
+    },
+    "pk01_park_studio/props.py": {
+      "size": 13503,
+      "sha256": "7e4b0fca19d81f46ccc652aea61f961efccbf34cc12b7ea124fb20f73ba56ef0"
+    },
+    "pk01_park_studio/runtime.py": {
+      "size": 9917,
+      "sha256": "2eb0acb50b06a7cd0956e73b8174b305752a5b02fc73ce7a56445a3c1d0a92f1"
+    },
+    "pk01_park_studio/sports.py": {
+      "size": 7370,
+      "sha256": "2908baa0e6683acf4a68bcdf3acd1031eca3211ba7a2803ad7593442c9934792"
+    },
+    "pk01_park_studio/surfaces.py": {
+      "size": 1847,
+      "sha256": "81c7473fd62e9b2c15d70482c136676d9b84e65f212979a9dd22b0a59d1c3ded"
+    },
+    "pk01_park_studio/ui.py": {
+      "size": 16939,
+      "sha256": "2733a5cdffd17d259e1c8547d0f3ef86f7bc6eeede3365676f82a6a40721b403"
+    },
+    "pk01_park_studio/unreal/PK01_Import.py": {
+      "size": 15212,
+      "sha256": "420eec0584ea9a9c6da0f1af0b0fd0dd31414a0d8c779a1c3e7eabb060e00e75"
+    },
+    "pk01_park_studio/vendor/SW01_LICENSE.txt": {
+      "size": 2288,
+      "sha256": "b72a3730ea51f6fba86170caf88eec72211d5bfe2faed483021602b3a0e724d5"
+    },
+    "pk01_park_studio/vendor/__init__.py": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pk01_park_studio/vendor/sw01_core.py": {
+      "size": 30227,
+      "sha256": "971c3ff188918fab7bcb456faee8642085d4f124eceff41dd9ba2ecf973d88a2"
+    },
+    "tests/test_repository.py": {
+      "size": 2900,
+      "sha256": "d0808f6e7f2b7a160b6cb0a3792e3dd42e8a26bcbe412f8cc05ad0b8f5d7ce93"
+    },
+    "tools/__init__.py": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "tools/build_addon.py": {
+      "size": 3236,
+      "sha256": "bd58a45389f38b226fb8127f53b8f4990f0b2f0f8beafb70efbea02c61b18b17"
+    }
+  }
+}

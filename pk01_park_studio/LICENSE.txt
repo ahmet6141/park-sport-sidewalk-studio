@@ -1,0 +1,38 @@
+PK01 Park + Sport Studio 1.0.0
+
+SOURCE CODE: MIT License
+Copyright (c) 2026 PK01 contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+ORIGINAL GENERATED GEOMETRY AND TEXTURES:
+To the extent possible under law, the contributors waive copyright and related
+rights in the original PK01 generated geometry and texture assets under CC0 1.0
+Universal: https://creativecommons.org/publicdomain/zero/1.0/
+This dedication does not affect third-party rights, trademarks, or any external
+assets the user adds. No warranties are provided. No font files are included.
+
+THIRD-PARTY / PROVIDED SOURCE:
+The user-provided SW01 core is redistributed unchanged with its original
+license notice at vendor/SW01_LICENSE.txt. Shared SW01 texture bytes were
+preserved from that package. Its declared license is retained.
+
+NOT AN ENGINEERING DESIGN:
+The scenery generators do not provide construction, sports homologation,
+accessibility certification or structural safety guarantees.

@@ -1,0 +1,149 @@
+{
+  "native_maps": [
+    {
+      "name": "EPDM",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "provenance": "Original procedural, NOT a scan",
+      "license": "CC0-1.0",
+      "maps": [
+        "BaseColor",
+        "ORM",
+        "NormalGL",
+        "NormalDX",
+        "Height"
+      ]
+    },
+    {
+      "name": "Grass",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "provenance": "Original procedural, NOT a scan",
+      "license": "CC0-1.0",
+      "maps": [
+        "BaseColor",
+        "ORM",
+        "NormalGL",
+        "NormalDX",
+        "Height"
+      ]
+    },
+    {
+      "name": "Timber",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "provenance": "Original procedural, NOT a scan",
+      "license": "CC0-1.0",
+      "maps": [
+        "BaseColor",
+        "ORM",
+        "NormalGL",
+        "NormalDX",
+        "Height"
+      ]
+    },
+    {
+      "name": "Bark",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "provenance": "Original procedural, NOT a scan",
+      "license": "CC0-1.0",
+      "maps": [
+        "BaseColor",
+        "ORM",
+        "NormalGL",
+        "NormalDX",
+        "Height"
+      ]
+    },
+    {
+      "name": "Mulch",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "provenance": "Original procedural, NOT a scan",
+      "license": "CC0-1.0",
+      "maps": [
+        "BaseColor",
+        "ORM",
+        "NormalGL",
+        "NormalDX",
+        "Height"
+      ]
+    },
+    {
+      "name": "Stone",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "provenance": "Original procedural, NOT a scan",
+      "license": "CC0-1.0",
+      "maps": [
+        "BaseColor",
+        "ORM",
+        "NormalGL",
+        "NormalDX",
+        "Height"
+      ]
+    },
+    {
+      "name": "Gravel",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "provenance": "Original procedural, NOT a scan",
+      "license": "CC0-1.0",
+      "maps": [
+        "BaseColor",
+        "ORM",
+        "NormalGL",
+        "NormalDX",
+        "Height"
+      ]
+    },
+    {
+      "name": "Leaf",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "provenance": "Original procedural, NOT a scan",
+      "license": "CC0-1.0",
+      "maps": [
+        "BaseColor",
+        "ORM",
+        "NormalGL",
+        "NormalDX",
+        "Height"
+      ]
+    },
+    {
+      "name": "Water",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "provenance": "Original procedural, NOT a scan",
+      "license": "CC0-1.0",
+      "maps": [
+        "BaseColor",
+        "ORM",
+        "NormalGL",
+        "NormalDX",
+        "Height"
+      ]
+    }
+  ],
+  "shared_SW01": "Byte-identical BaseColor, ORM, NormalGL, NormalDX from supplied SW01 1.0.1; not rescanned or repainted."
+}

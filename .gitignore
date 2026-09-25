@@ -1,0 +1,33 @@
+# Python / local tools
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.idea/
+.vscode/
+# Private configuration
+.env
+.env.*
+*.pem
+*.key
+# Build/export products: use releases, not Git history
+/dist/
+*.zip
+*.blend
+*.blend1
+*.blend2
+*.fbx
+*.glb
+*.gltf
+*.bin
+PK01_Export*/
+*.uasset
+*.umap
+/Saved/
+/Intermediate/
+/DerivedDataCache/
+# Machine-local state
+.pk01-publish-state.json
+.DS_Store
+Thumbs.db

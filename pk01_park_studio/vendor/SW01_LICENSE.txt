@@ -1,0 +1,41 @@
+SW01 Sidewalk Studio — licensing and provenance
+
+SOURCE CODE: MIT License
+Copyright (c) 2026 SW01 Sidewalk Studio contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+GENERATED MODELS, ORIGINAL PROCEDURAL TEXTURES AND PREVIEW RENDERS:
+To the extent any copyright or related rights exist in the supplied original
+outputs, these outputs are dedicated under CC0 1.0 Universal:
+https://creativecommons.org/publicdomain/zero/1.0/
+Commercial use, modification and redistribution are permitted under that dedication.
+
+No third-party photographic material scans, paid textures, font files or proprietary
+models are included. Texture metadata identifies these as original procedural outputs,
+not photogrammetry. Poly Haven/ambientCG links in the docs are external references;
+the referenced files were NOT downloaded and included in this package.
+
+Blender and Unreal Engine are separate products with their respective licences.
+Their binaries, fonts and SDKs are not distributed here. This project does not imply
+endorsement by Blender Foundation, Epic Games, Poly Haven or ambientCG.
+
+IMPORTANT: Geometry and Python file syntax were checked independently, but Blender
+and Unreal runtime operation were NOT verified. Visual sidewalk features are not
+civil engineering or accessibility compliance certificates.

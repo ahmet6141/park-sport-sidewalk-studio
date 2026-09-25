@@ -1,0 +1,4 @@
+# Keep supplied byte hashes stable, including on Windows.
+* -text
+*.png binary
+*.jpg binary
