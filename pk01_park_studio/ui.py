@@ -226,20 +226,28 @@ class PK01_PT_panel(bpy.types.Panel):
         l.separator();l.label(text=s.status[:72])
 
 CLASSES=(PK01_Settings,PK01_OT_build,PK01_OT_copy_style,PK01_OT_add_component,PK01_OT_connect,PK01_OT_replace_trees,PK01_OT_preview,PK01_OT_export,PK01_OT_freeze,PK01_PT_panel)
-def register():
+def _registered(cls):
+    """The live registered class for cls, including a stale copy left by a module reload.
+    Operators are exposed in bpy.types under their bl_idname-derived RNA name
+    (pk01.copy_sw01_style -> PK01_OT_copy_sw01_style), not their Python class name."""
+    if getattr(cls,'is_registered',False):return cls
+    name=cls.__name__
+    if issubclass(cls,bpy.types.Operator):
+        module,op=cls.bl_idname.split('.',1);name=f'{module.upper()}_OT_{op}'
+    return getattr(bpy.types,name,None)
+
+def _unregister_all():
     if hasattr(bpy.types.Scene,'pk01'):del bpy.types.Scene.pk01
     for cls in reversed(CLASSES):
-        old=getattr(bpy.types,cls.__name__,None)
+        old=_registered(cls)
         if old:
             try:bpy.utils.unregister_class(old)
             except RuntimeError:pass
+
+def register():
+    _unregister_all()
     for cls in CLASSES:bpy.utils.register_class(cls)
     bpy.types.Scene.pk01=PointerProperty(type=PK01_Settings)
 
 def unregister():
-    if hasattr(bpy.types.Scene,'pk01'):del bpy.types.Scene.pk01
-    for cls in reversed(CLASSES):
-        old=getattr(bpy.types,cls.__name__,None)
-        if old:
-            try:bpy.utils.unregister_class(old)
-            except RuntimeError:pass
+    _unregister_all()
