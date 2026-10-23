@@ -14,6 +14,9 @@ pk01_park_studio/
   materials.py         Blender PBR image shader kurulum yolu
   runtime.py           Staging koleksiyonu, sahiplik, instance mesh'leri
   bridge.py            PK01/SW01 soket bilgisi ve kavisli yol bağlantısı
+  curves.py            Catmull-Rom, fillet, dalga (meander), uyarlamalı örnekleme
+  modeling.py          Profil süpürme (sweep) ve torna (lathe), sert/yumuşak kenar grupları
+  flow.py              FLOW kaldırım: eksen takipli döşeme, profilli bordür, yuvarlak kavşak
   contracts.py         Saf Python matris/eksen/ölçek doğrulaması
   exporter.py          FBX başına tek asset + yerleşim manifesti
   unreal/PK01_Import.py UE editörü için export klasörüne kopyalanan importer
@@ -64,3 +67,11 @@ VTK önizlemeleri: Gerçek model/doku verisi üzerinden aydınlatılmış raster
 Masterplan yol genişliği 2–5 m; kaldırım üst yüzeyi .08–.40 m; ağaç sayısı 0–550; merkez aralığı 3–15 m; ağaç ölçeği .5–1.6; gölet derinliği .6–4 m. Değer kombinasyonları geometri sınırlarını aşarsa hata oluşabilir. Planın alan sınırı keyfi L biçimli arsa veya eğimli arazi değildir; yalnızca gölet çanağı düşey deformasyon içerir.
 
 DRAFT/BALANCED/HERO yalnızca belirli geometri detay seviyeleridir; final render kalitesinin otomatik üç seviyesi değildir. Material bake, displacement, ray-tracing ayarı, ağaç rüzgârı, LOD/Nanite ve yerleşim bazlı light bake ayrıca ele alınır.
+
+## FLOW kaldırım sözleşmesi (1.1.0)
+
+`flow.build_flow_module` SW01'in `build_module` fonksiyonuyla aynı girdileri (sw.Path, sw.Config) alır ve aynı metadata anahtarlarını (`config`, `path`, `in`, `out`, `collision`) döndürür; ek olarak `builder='PK01_FLOW'` ve `curb_profile` yazar. Vendored `sw01_core.py` değiştirilmez; FLOW yalnızca onun Path, prism, clip ve materyal sözleşmesini kullanır.
+
+Taşlar yol ekseninde (s, lateral) uzayında yerleştirilir: lateral sıralar simetrik kesimli, boyuna kesimler koşu bağında yarım taş kaydırmalıdır. Her taş `path.strip` ile üretildiği için eğride kenarları eksene paraleldir. Bordür taşları kapalı, saat yönü tersine (CCW) bir kesit profilinin süpürülmesidir; yuvarlatılmış kenar yüzleri köşe paylaşarak yumuşak, keskin kenarlar köşe çoğaltılarak sert gölgelenir. Her katı parça su geçirmez ve pozitif hacimlidir (testler bunu tüm stil ve kavşak kombinasyonlarında denetler).
+
+Örneklenmiş eğrilerde uç kesitler, tasarım teğetine dik olacak şekilde sabitlenir (`flow.make_path`). Böylece dalgalı bir yol ile kavşak ağzı arasında kıl payı kama boşluğu oluşmaz. Kavşak dış hattı CCW çokgendir; iç köşeler bordür dönüş yarıçapıyla, açıkta kalan dış köşeler yarım yol genişliğiyle yuvarlatılır, ağız kenarları keskin kalır. Döşeme alanı bordür + kenar şeridi kadar içeri ofsetlenir ve SW01 desen ızgarasıyla kırpılır. Collision: merkez kare, kol dikdörtgenleri ve her bordür dönüşü için iki konveks kama.

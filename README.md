@@ -1,6 +1,6 @@
 # Park • Sport • Sidewalk Studio
 
-**PK01 1.0.0 · Blender scene authoring · SW01 1.0.1 integration · Unreal export bridge**
+**PK01 1.1.0 · Blender scene authoring · FLOW curved sidewalks · SW01 1.0.1 integration · Unreal export bridge**
 
 [**Türkçe rehber**](README_TR.md) · [Full add-on manual](pk01_park_studio/README_TR.md) · [Publication guide](docs/PUBLISH_TR.md)
 
@@ -17,7 +17,8 @@ A procedural Blender add-on for sports parks, gardens, ponds, planting and coord
 | Masterplans | Aster sports campus, Mira neighborhood park, Liva lakeside garden |
 | Sports | Basketball, tennis, football, futsal, volleyball, badminton, pickleball, table tennis and fitness |
 | Landscape | Pond bowl and surface, rocks, reeds, planting exclusions and reproducible tree placement |
-| Furniture | Benches, pergolas, picnic tables, planters, cycle racks and lighting geometry |
+| Furniture | Soft-edged and curved benches, pergolas, picnic tables, planters, cycle racks, turned light poles and bollards |
+| FLOW sidewalks | Path-following paving, profiled (bullnose/chamfer) jointed curbs, curb-return junctions, gentle meanders |
 | Sidewalk bridge | Vendored SW01 core, shared material naming, port connections and style transfer |
 | Export | Unique FBX mesh library, texture files and placement JSON; Unreal Editor importer source |
 
@@ -31,9 +32,15 @@ This repository ZIP is **not** itself the Blender installation ZIP. Build the ad
 python tools/build_addon.py
 ```
 
-The result is `dist/PK01_ParkSport_Studio_1_0_0.zip`. In Blender use **Preferences → Add-ons → Install from Disk**, choose that ZIP and enable PK01. Open the 3D Viewport sidebar with **N → PK01**. Do not run `__init__.py` as a standalone text script.
+The result is `dist/PK01_ParkSport_Studio_1_1_0.zip`. In Blender use **Preferences → Add-ons → Install from Disk**, choose that ZIP and enable PK01. Open the 3D Viewport sidebar with **N → PK01**. Do not run `__init__.py` as a standalone text script.
 
 Start with **Liva / Draft / 40–60 trees**, Object Mode and Unit Scale 1.0. See the [original manual](pk01_park_studio/README_TR.md) for generation and export instructions. The build tool needs only the Python standard library, not Blender.
+
+## FLOW curved sidewalks (1.1.0)
+
+![Classic square pads versus FLOW curb returns](docs/previews/PK01_FLOW_Paths.png)
+
+The default **FLOW** path style lays pavers in courses that follow the centre line, sweeps jointed curb stones from a bullnose, chamfer or square section, and replaces square junction pads with curb returns and rounded dead ends. Network links meander gently and still meet every junction mouth square and flush. Choose **CLASSIC** in the SW01 tab for the untouched SW01 1.0.1 output (byte-identical to 1.0.0). Details: [add-on manual](pk01_park_studio/README_TR.md) and [technical notes](pk01_park_studio/docs/TECHNICAL_TR.md). The preview is a plan-view geometry plot, not a Blender render.
 
 ## SW01 interoperability
 
@@ -47,7 +54,7 @@ The full standalone SW01 kit is **not** duplicated in this repository. Its share
 python -m unittest discover -s tests -v
 ```
 
-These tests cover repository source syntax, the supplied file hashes, representative geometry/transform checks and package metadata. They do not run `bpy`, Unreal or the complete historical validation suite. The original [validation report](pk01_park_studio/docs/validation_report.json) is retained as a historical report, not a fresh CI result.
+These tests cover repository source syntax, the supplied file hashes, representative geometry/transform checks and package metadata. They also check that every FLOW solid is watertight, all junction arm combinations build, and CLASSIC sidewalks are unchanged. They do not run `bpy`, Unreal or the complete historical validation suite. The original [validation report](pk01_park_studio/docs/validation_report.json) is retained as a historical report, not a fresh CI result.
 
 ## Layout
 
