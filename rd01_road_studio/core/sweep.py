@@ -33,6 +33,7 @@ class RoadOptions:
     port_end: bool = False
     markings: bool = True
     dash_period_fit: bool = True        # scale dash cycles so they divide the road length
+    dash_period: float = 0.0            # > 0: fit whole cycles of about this length (kit pieces chain in phase)
     skirt: bool = True
 
 
@@ -59,12 +60,14 @@ def _build_grid(rail: Rail, tpl: Template, stations: list[float]) -> _Grid:
     return _Grid(stations, pos, tans, run)
 
 
-def _dash_intervals(pattern: str, length: float, fit: bool) -> list[tuple[float, float]]:
+def _dash_intervals(pattern: str, length: float, fit: bool, base_period: float = 0.0) -> list[tuple[float, float]]:
     if pattern == 'SOLID':
         return [(0.0, length)]
     on, off = (float(x) for x in pattern.split('_')[1:3])
     period = on + off
-    if fit:
+    if base_period > 0:
+        on, off, period = on * base_period / period, off * base_period / period, base_period
+    if fit or base_period > 0:
         n = max(1, round(length / period))
         k = length / (n * period)
         on, off, period = on * k, off * k, period * k
@@ -249,7 +252,7 @@ def _markings(m: QMesh, tpl: Template, grid: _Grid, i0: int, i1: int, origin: tu
     length_total = st[-1]
     isl = max(m.face_island, default=0) + 10
     for t_c, spec in tpl.lines:
-        for a, b in _dash_intervals(spec.pattern, length_total, opts.dash_period_fit):
+        for a, b in _dash_intervals(spec.pattern, length_total, opts.dash_period_fit, opts.dash_period):
             a, b = max(a, s0), min(b, s1)
             if b - a < 0.05:
                 continue

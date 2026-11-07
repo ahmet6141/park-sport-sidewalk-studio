@@ -12,7 +12,8 @@ Vec3 = tuple[float, float, float]
 
 
 class Rail:
-    def __init__(self, points: list[Vec3], closed: bool = False):
+    def __init__(self, points: list[Vec3], closed: bool = False,
+                 end_tangents: tuple[tuple[float, float], tuple[float, float]] | None = None):
         pts: list[Vec3] = []
         for p in points:
             p = (float(p[0]), float(p[1]), float(p[2]) if len(p) > 2 else 0.0)
@@ -28,6 +29,11 @@ class Rail:
             self.dist.append(self.dist[-1] + math.hypot(b[0] - a[0], b[1] - a[1]))
         self.length = self.dist[-1]
         self.closed = closed
+        # Exact design tangents at both ends (arcs, Bézier handles): sampled chords lag by half a
+        # step angle, which would leave a kit joint or a junction mouth out of square.
+        self.end_tangents = None
+        if end_tangents:
+            self.end_tangents = tuple(_unit2(t) for t in end_tangents)
 
     # ------------------------------------------------------------- builders
     @staticmethod
@@ -45,7 +51,7 @@ class Rail:
         a = math.radians(abs(angle_deg)); sgn = 1 if angle_deg > 0 else -1
         n = max(8, math.ceil(radius * a / step))
         return Rail([(start[0] + radius * math.sin(a * k / n), start[1] + sgn * radius * (1 - math.cos(a * k / n)), start[2])
-                     for k in range(n + 1)])
+                     for k in range(n + 1)], end_tangents=((1.0, 0.0), (math.cos(a), sgn * math.sin(a))))
 
     @staticmethod
     def from_bezier(segments: list[tuple[Vec3, Vec3, Vec3, Vec3]], step: float = 0.05) -> 'Rail':
@@ -58,7 +64,12 @@ class Rail:
                 t = k / n; u = 1 - t
                 pts.append(tuple(u ** 3 * p0[i] + 3 * u * u * t * h0[i] + 3 * u * t * t * h1[i] + t ** 3 * p1[i]
                                  for i in range(3)))
-        return Rail(pts)
+        def lead(a, b, c):
+            d = (b[0] - a[0], b[1] - a[1])
+            return d if math.hypot(*d) > 1e-9 else (c[0] - a[0], c[1] - a[1])   # zero-length handle
+        first, last = segments[0], segments[-1]
+        return Rail(pts, end_tangents=(lead(first[0], first[1], first[2]),
+                                       tuple(-c for c in lead(last[3], last[2], last[1]))))
 
     # ------------------------------------------------------------- queries
     def _locate(self, s: float) -> tuple[int, float]:
@@ -73,7 +84,12 @@ class Rail:
         return tuple(a[j] + k * (b[j] - a[j]) for j in range(3))
 
     def tangent(self, s: float, h: float = 0.05) -> tuple[float, float]:
-        """Unit plan tangent (central difference; one-sided at the ends)."""
+        """Unit plan tangent: exact at the ends when known, else a central difference."""
+        if self.end_tangents:
+            if s <= 1e-9:
+                return self.end_tangents[0]
+            if s >= self.length - 1e-9:
+                return self.end_tangents[1]
         a = self.at(max(0.0, s - h)); b = self.at(min(self.length, s + h))
         dx, dy = b[0] - a[0], b[1] - a[1]
         n = math.hypot(dx, dy)
@@ -96,6 +112,13 @@ class Rail:
 
     def max_curvature(self, s0: float, s1: float, probes: int = 6) -> float:
         return max(abs(self.curvature(s0 + (s1 - s0) * k / probes)) for k in range(probes + 1))
+
+
+def _unit2(v) -> tuple[float, float]:
+    n = math.hypot(v[0], v[1])
+    if n < 1e-12:
+        raise ValueError('Zero-length end tangent.')
+    return (v[0] / n, v[1] / n)
 
 
 def station_spacing(radius: float, reach: float, tol: float = 0.01, max_step: float = 1.0) -> float:
