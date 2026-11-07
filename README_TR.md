@@ -1,12 +1,12 @@
 # Park • Sport • Sidewalk Studio
 
-**PK01 Park + Sport Studio 1.0.0 + SW01 1.0.1 entegrasyonu**
+**PK01 Park + Sport Studio 1.1.0 + FLOW kavisli kaldırımlar + SW01 1.0.1 entegrasyonu**
 
 ![Üretilmiş sahneler](docs/previews/PK01_Design_Board.png)
 
 Blender üzerinden park, spor tesisi, gölet, peyzaj, kent mobilyası ve uyumlu kaldırım bağlantıları oluşturmak için hazırlanmış kaynak kod projesidir.
 
-**Durum:** Blender 4.5 ve UE5.8 hedeflenmiştir; bu uygulamalar içinde çalışma doğrulaması yapılmış değildir. Kaynak/paket testleri, uygulama uyumluluğu testi yerine geçmez. Mevcut geometri kodu bu repo hazırlığında değiştirilmedi.
+**Durum:** Blender 4.5 ve UE5.8 hedeflenmiştir; bu uygulamalar içinde çalışma doğrulaması yapılmış değildir. Kaynak/paket testleri, uygulama uyumluluğu testi yerine geçmez. 1.1.0 sürümü FLOW kavisli kaldırımları ve daha kaliteli mobilya modellerini ekler; CLASSIC mod 1.0.0 kaldırım geometrisini birebir korur.
 
 ## Kurulum
 
@@ -16,9 +16,15 @@ Bu kaynak repo ZIP'ini Blender'a doğrudan kurma. Klasörü çıkartıp içinde 
 python tools/build_addon.py
 ```
 
-Python 3.10 veya üzeri gerekir. Üretilen **dist/PK01_ParkSport_Studio_1_0_0.zip** dosyasını Blender'ın **Install from Disk** komutuyla kur. Eklentiyi etkinleştir, **N → PK01** paneline geç. İlk denemeyi yeni bir sahnede **Liva, Draft, 40–60 ağaç, Unit Scale 1.0, Object Mode** ile yap.
+Python 3.10 veya üzeri gerekir. Üretilen **dist/PK01_ParkSport_Studio_1_1_0.zip** dosyasını Blender'ın **Install from Disk** komutuyla kur. Eklentiyi etkinleştir, **N → PK01** paneline geç. İlk denemeyi yeni bir sahnede **Liva, Draft, 40–60 ağaç, Unit Scale 1.0, Object Mode** ile yap.
 
 **[Ayrıntılı eklenti kullanım rehberi](pk01_park_studio/README_TR.md)**
+
+## FLOW kavisli kaldırımlar (1.1.0)
+
+![Classic kare pad ve FLOW bordür dönüşleri](docs/previews/PK01_FLOW_Paths.png)
+
+Varsayılan **FLOW** stili: taşlar yol eksenini takip eder, bordürler yuvarlatılmış (bullnose), pahlı veya düz profilli derzli taşlardır, kavşaklar bordür dönüşlü yuvarlak köşelerle ve çıkmaz uçlar yarım daireyle biter. Bağlantı yolları yumuşak bir dalga ile kıvrılır ve kavşak ağızlarına her zaman dik ve kesintisiz oturur. Orijinal çıktı için SW01 sekmesinde **CLASSIC** seç. Görsel, Blender render'ı değil plan görünümlü geometri çizimidir. Ayrıntılar eklenti rehberindedir.
 
 ## SW01 ile ilişki
 

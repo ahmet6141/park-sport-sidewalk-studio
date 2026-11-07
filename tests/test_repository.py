@@ -29,7 +29,7 @@ class RepositoryTests(unittest.TestCase):
                 self.assertLess(path.stat().st_size, 100 * 1024 * 1024)
 
     def test_version(self):
-        self.assertEqual(version(), "1_0_0")
+        self.assertEqual(version(), "1_1_0")
 
     def test_texture_png_headers(self):
         for path in (ROOT / "pk01_park_studio/assets/textures").rglob("*.png"):
